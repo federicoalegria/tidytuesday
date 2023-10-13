@@ -5,6 +5,7 @@
 
 pacman::p_load(ggalt,
                ggdark,
+               ggstatsplot,
                gt,
                gtExtras,
                leaflet,
@@ -47,8 +48,8 @@ haunted_places <-
     state %in% c("New York", "New Jersey", "Connecticut", "Rhode Island", "Massachusetts", "Vermont", "New Hampshire", "Maine", "Pennsylvania") ~ "Northeast",
     state %in% c("Maryland", "Delaware", "Virginia", "West Virginia", "Kentucky", "North Carolina", "South Carolina", "Tennessee", "Georgia", "Florida", "Washington DC", "Arizona", "New Mexico") ~ "South",
     state %in% c("North Dakota", "South Dakota", "Nebraska", "Kansas", "Minnesota", "Iowa", "Missouri", "Montana", "Wyoming", "Colorado", "Utah", "Idaho", "Oklahoma", "Texas", "Arkansas", "Louisiana", "Mississippi", "Alabama") ~ "Central"
+    )
   )
-)
 
 haunted_places |> 
   group_by(region) |> 
@@ -84,8 +85,10 @@ haunted_places <-
   mutate(location_type = str_split(location, " ") |>  sapply(tail, 1)) |>
   mutate(
     location_type = case_when(
-      location_type %in% c("School", "school", "School)") ~ "School",
       location_type %in% c("Cemetery", "cemetery") ~ "Cemetery",
+      location_type %in% c("Road", "Rd.") ~ "Road",
+      location_type %in% c("School", "school", "School)") ~ "School",
+      location_type %in% c("Theater", "Theatre") ~ "Theater",
       TRUE ~ location_type
     )
   )
@@ -132,7 +135,7 @@ haunted_places |>
 # Wordcloud of `$description`
 haunted_places |>
   select(description) |>
-  sample_n(250) |>
+  sample_n(375) |>
   unnest_tokens(output = word, input = description) |>
   anti_join(stop_words, by = "word") |>
   filter(str_length(word) >= 2) |>
@@ -141,30 +144,7 @@ haunted_places |>
   arrange(desc(n)) |>
   wordcloud2(
     backgroundColor = "#000000",
-    color = "#ffffff",
-    rotateRatio = 0
-  )
-
-# Wordcloud of `$description_brief`
-haunted_places |>
-  select(description) |>
-  filter(
-    !str_detect(
-      description,
-      pattern = "(apparition|banshee|daemon|demon|devil|eidolon|
-      ethereal being|ghost|incorporeal being|kelpie|manes|phantasm|phantom|
-      poltergeist|revenant|shade|specter|spook|vampire|wraith)"
-    )
-  ) |>
-  unnest_tokens(output = word, input = description) |>
-  anti_join(stop_words, by = "word") |>
-  filter(str_length(word) >= 2) |>
-  group_by(word) |>
-  summarise(n = n()) |>
-  arrange(desc(n)) |>
-  wordcloud2(
-    backgroundColor = "#000000",
-    color = "#ffffff",
+    color = "#bac121",
     rotateRatio = 0
   )
 
@@ -183,7 +163,7 @@ haunted_places |>
   ) +
   labs(
     title = "Ghostly Apparitions",
-    x = "count",
+    x = " ",
     y = " ",
     caption = "DATA SOURCE {Tidy Tuesday 2023_41}
 
@@ -196,11 +176,6 @@ haunted_places |>
       colour = "#bac121",
       family = "consolas",
       size = 20
-    ),
-    axis.title.y = element_text(
-      colour = "#bac121",
-      family = "consolas",
-      size = 16
     ),
     axis.text.y = element_text(
       colour = "#bac121",
@@ -221,28 +196,12 @@ haunted_places |>
   ) +
   scale_x_continuous(limits = c(0, 10000))
 
-# Wordcloud of `$location`
-haunted_places |>
-  select(location) |>
-  sample_n(250) |>
-  unnest_tokens(output = word, input = location) |>
-  anti_join(stop_words, by = "word") |>
-  filter(str_length(word) >= 2) |>
-  group_by(word) |>
-  summarise(n = n()) |>
-  arrange(desc(n)) |>
-  wordcloud2(
-    backgroundColor = "#000000",
-    color = "#ffffff",
-    rotateRatio = 0
-  )
-
 # Lollipop of `$location_type`
 haunted_places |>
   group_by(location_type) |>
   count(location_type) |>
   arrange(desc(n)) |>
-  filter(n >= 60) |>
+  filter(n >= 58) |>
   ggplot(aes(x = n, y = reorder(location_type, n))) +
   geom_lollipop(colour = "#bac121", horizontal = TRUE) +
   geom_text(
@@ -253,9 +212,10 @@ haunted_places |>
     family = "consolas"
   ) +
   labs(
-    title = "Top 30 Haunted Places",
-    x = "reported across the US",
-    y = "spooky location types",
+    title = "Top 25 Haunted Location Types",
+    subtitle = "reported across the US",
+    x = " ",
+    y = " ",
     caption = "DATA SOURCE {Tidy Tuesday 2023_41}
 
     https://github.com/rfordatascience/tidytuesday/blob/master/data/2023/2023-10-10/readme.md"
@@ -268,7 +228,7 @@ haunted_places |>
       family = "consolas",
       size = 20
     ),
-    axis.title.y = element_text(
+    plot.subtitle = element_text(
       colour = "#bac121",
       family = "consolas",
       size = 16
@@ -277,11 +237,6 @@ haunted_places |>
       colour = "#bac121",
       family = "consolas",
       size = 10
-    ),
-    axis.title.x = element_text(
-      colour = "#bac121",
-      family = "consolas",
-      size = 16
     ),
     axis.text.x = element_text(
       colour = "#bac121",
@@ -339,7 +294,7 @@ haunted_places |>
       family = "consolas",
       size = 10
     ),
-  plot.caption = element_text(colour = "#bac121", family = "consolas")
+    plot.caption = element_text(colour = "#bac121", family = "consolas")
   ) +
   facet_wrap( ~ description_brief) +
   coord_flip()
@@ -353,11 +308,17 @@ table(x = haunted_places$description_brief,
 chisq.test(x = haunted_places$description_brief, 
            y = haunted_places$region)
 
+# rcompanion::cramerV
 cramerV(x = haunted_places$description_brief,
         y = haunted_places$region,
         bias.correct = TRUE)
 
 # COMMUNICATE ----
+
+# ggstatsplot::ggbarstats
+## https://indrajeetpatil.github.io/ggstatsplot/articles/web_only/faq.html#how-can-i-modify-the-fill-colors-with-custom-values
+haunted_places |> 
+  ggbarstats(description_brief, region, type = "nonparametric")
 
 # ... ----
 
@@ -367,4 +328,3 @@ cramerV(x = haunted_places$description_brief,
 set.seed(8000)
 
 # temp ----
-
