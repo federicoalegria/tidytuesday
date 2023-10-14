@@ -5,15 +5,18 @@
 
 pacman::p_load(ggalt,
                ggdark,
+               ggraph,
                ggstatsplot,
                gt,
                gtExtras,
+               igraph,
                leaflet,
                rcompanion,
                skimr,
                stringr,
                tidytext,
                tidyverse,
+               widyr,
                wordcloud2)
 
 # DATA ----
@@ -299,12 +302,12 @@ haunted_places |>
   facet_wrap( ~ description_brief) +
   coord_flip()
 
-# chi square test of independence
-
+# tab
 table(x = haunted_places$description_brief, 
       y = haunted_places$region) |> 
   knitr::kable(caption = "Table 02: Defined and Not defined ghostly apparitions by region")
 
+# chi square test of independence
 chisq.test(x = haunted_places$description_brief, 
            y = haunted_places$region)
 
@@ -312,6 +315,24 @@ chisq.test(x = haunted_places$description_brief,
 cramerV(x = haunted_places$description_brief,
         y = haunted_places$region,
         bias.correct = TRUE)
+
+# word correlation graph
+haunted_places |>
+  select(description) |>
+  sample_n(10) |>
+  unnest_tokens(output = word, input = description) |>
+  anti_join(stop_words, by = "word") |>
+  filter(str_length(word) >= 2) |>
+  count(word, sort = TRUE) |>
+  pairwise_cor(word, n) |>
+  filter(correlation > 0.8) |>
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(edge_alpha = correlation), show.legend = FALSE) +
+  geom_node_point(color = "#38761d",
+                  size = 5,
+                  alpha = 0.5) +
+  geom_node_text(aes(label = name), repel = TRUE) +
+  theme_minimal()
 
 # COMMUNICATE ----
 
