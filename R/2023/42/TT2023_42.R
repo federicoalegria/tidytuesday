@@ -121,75 +121,9 @@ taylor_album_songs |>
 
 # ANALYSE ----
 
-# Modeling
+# Modeling ----
 
 # multiple linear regression analysis
-## https://www.perplexity.ai/search/f03b99ef-9cd1-40a7-b791-7c96946fccf4
-
-# There are several assumptions that must be met when performing a multiple
-# linear regression analysis. These are important to ensure that the model is
-# correctly specified and that the results are reliable. The key assumptions of
-# multiple linear regression are:
-#   
-# - **Linearity**: There must be a linear relationship between the dependent
-# variable and the independent variables. This can be checked using
-# scatterplots showing a linear or curvilinear relationship[1][2][3][4].
-# 
-# - **Normality**: The residual values must be normally distributed. This can be
-# checked using a normal probability plot or a histogram[1][2][3][4].
-# 
-# - **Homoscedasticity**: The variance of the residual errors must be similar
-# across the value of each independent variable. This can be checked
-# through a plot of the predicted values against the standardized residual
-# values to see if the points are equally distributed across all the values
-# of the independent variables[1][3].
-# 
-# - **Multicollinearity**: The independent variables must not be highly
-# correlated with each other. Multicollinearity makes it difficult to
-# identify which variables better explain the dependent variable. This
-# assumption is verified by computing a matrix of Pearson’s bivariate
-# correlations among all the independent variables. If there is no
-# collinearity in the data, then all the values should be less than 0.8[1]
-# [2].
-# 
-# It is important to note that these assumptions are not always met in practice,
-# and there are techniques to deal with violations of these assumptions. For
-# example, transformations of the variables or using robust regression methods
-# can help to address violations of the normality and homoscedasticity
-# assumptions[3].
-# 
-# Citations:
-#   
-# [1] https://www.datacamp.com/tutorial/multiple-linear-regression-r-tutorial
-# [2] https://www.statisticssolutions.com/free-resources/directory-of-statistical-analyses/assumptions-of-multiple-linear-regression/
-# [3] http://www.sthda.com/english/articles/39-regression-model-diagnostics/161-linear-regression-assumptions-and-diagnostics-in-r-essentials/
-# [4] https://www.reddit.com/r/spss/comments/uawa33/assumptions_multiple_linear_regression_with/
-# [5] https://stats.stackexchange.com/questions/582725/making-my-linear-regression-model-meet-assumptions-causes-a-large-increase-in-me
-# [6] https://godatadrive.com/blog/basic-guide-to-test-assumptions-of-linear-regression-in-r
-
-# The `performance()` function from the `easystats` package can be helpful for
-# checking on assumptions of data before doing a multiple linear regression
-# analysis. The `performance()` function computes indices of model performance
-# for regression models, such as R-squared, root mean squared error (RMSE), or
-# intraclass correlation coefficient (ICC)[1]. However, it is important to note
-# that the `performance()` function does not directly check the assumptions of
-# the model. Instead, the `check_model()` function from the same package can be
-# used to check the assumptions of the model, such as linearity, normality,
-# homoscedasticity, and multicollinearity[1][2][3][4]. The `check_model
-# ()` function provides a visual check of various model assumptions, such as
-# normality of residuals, normality of random effects, linear relationship,
-# homogeneity of variance, and multicollinearity[6]. Therefore, the `easystats`
-# package can be a useful tool for checking the assumptions of a multiple
-# linear regression model in R.
-# 
-# Citations:
-# 
-# [1] https://easystats.github.io/performance/
-# [2] https://www.r-bloggers.com/2021/07/easystats-quickly-investigate-model-performance/
-# [3] https://www.business-science.io/r/2021/07/13/easystats-performance-check-model.html
-# [4] https://rforpoliticalscience.com/2022/05/19/check-model-assumptions-with-easystats-package-in-r/
-# [5] https://youtube.com/watch?v=Bi8sHIo3s1Y
-# [6] https://rdrr.io/github/easystats/performance/man/check_model.html
 
 lm(
   valence ~ danceability + energy + mode + speechiness + acousticness + instrumentalness + liveness,
@@ -221,12 +155,7 @@ lm(
 ) |> 
   report()
 
-# https://bard.google.com/chat/973fe81d45d628c2?hl=en
-
 # scatter plot
-## metric & metric
-### Amasement
-#### https://www.perplexity.ai/search/58ada70b-f668-4cd6-9e23-ae5c56eaf886?s=u
 taylor_album_songs |>
   mutate(amasement = (energy + danceability + acousticness) / 3) |>
   ggplot(aes(x = valence,
@@ -265,4 +194,3 @@ taylor_album_songs |>
 # ... ----
 
 # https://www.youtube.com/watch?v=FvVnP8G6ITs
-
