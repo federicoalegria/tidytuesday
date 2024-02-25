@@ -45,7 +45,7 @@ df |>
   ) |>                                                               # for cleaner values
   gt() |>                                                            # the beautiful {gt} table!
     tab_header(title = md("**number of world heritage sites**"),
-               subtitle = md("**for Norway, Denmark and Sweden**")
+               subtitle = md("**for Denmark, Norway and Sweden**")
     ) |>                                                             # header style with md()
     fmt_missing(columns = everything()
     ) |>                                                             # clueless…
