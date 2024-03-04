@@ -47,9 +47,10 @@ p0 <-
              group = 1)) +
   geom_line(colour = "#400303") +
   labs(
-    title = "individual spending for St. Valentine's enthusiasts",
+    title = "yearly spending for St. Valentine's enthusiasts",
     subtitle = "",
-    y = "spending per person"
+    x = "",
+    y = ""
   ) +
   theme_minimal() +
   theme(text = element_text(family = "Roboto"),
@@ -63,9 +64,10 @@ p1 <-
              group = 1)) +
   geom_line(colour = "#b38468") +
   labs(
-    title = "candy",
-    subtitle = "",
-    y = "spending per person"
+    title = "",
+    subtitle = "candy",
+    x = "",
+    y = ""
   ) +
   theme_minimal() +
   theme(text = element_text(family = "Roboto"),
@@ -79,9 +81,10 @@ p2 <-
              group = 1)) +
   geom_line(colour = "#b38468") +
   labs(
-    title = "flowers",
-    subtitle = "",
-    y = "spending per person"
+    title = "",
+    subtitle = "flowers",
+    x = "",
+    y = ""
   ) +
   theme_minimal() +
   theme(text = element_text(family = "Roboto"),
@@ -95,9 +98,10 @@ p3 <-
              group = 1)) +
   geom_line(colour = "#b38468") +
   labs(
-    title = "greeting cards",
-    subtitle = "",
-    y = "spending per person"
+    title = "",
+    subtitle = "greeting cards",
+    x = "",
+    y = ""
   ) +
   theme_minimal() +
   theme(text = element_text(family = "Roboto"),
@@ -111,9 +115,10 @@ p4 <-
              group = 1)) +
   geom_line(colour = "#b38468") +
   labs(
-    title = "evenings out",
-    subtitle = "",
-    y = "spending per person"
+    title = "",
+    subtitle = "evenings out",
+    x = "",
+    y = ""
   ) +
   theme_minimal() +
   theme(text = element_text(family = "Roboto"),
@@ -127,9 +132,10 @@ p5 <-
              group = 1)) +
   geom_line(colour = "#b38468") +
   labs(
-    title = "clothing",
-    subtitle = "",
-    y = "spending per person"
+    title = "",
+    subtitle = "clothing",
+    x = "",
+    y = ""
   ) +
   theme_minimal() +
   theme(text = element_text(family = "Roboto"),
@@ -143,9 +149,10 @@ p6 <-
              group = 1)) +
   geom_line(colour = "#b38468") +
   labs(
-    title = "gift cards",
-    subtitle = "",
-    y = "spending per person"
+    title = "",
+    subtitle = "gift cards",
+    x = "",
+    y = ""
   ) +
   theme_minimal() +
   theme(text = element_text(family = "Roboto"),
