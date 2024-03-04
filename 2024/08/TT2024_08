@@ -1,0 +1,75 @@
+
+# --- TIDYTUESDAY::2024§08 --- #
+
+# https://github.com/rfordatascience/tidytuesday/blob/master/data/2024/2024-02-20/readme.md
+
+# Load ----
+
+pacman::p_load(
+  janitor,
+  skimr,
+  # tidylog,
+  tidyverse
+)
+
+# Data ----
+
+ig <-
+  readr::read_csv(
+    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-02-20/isc_grants.csv'
+  ) |> clean_names()
+
+## https://shorturl.at/nzQV3 :: dictionary (rich)
+
+# EXPLORE ----
+
+# TWEAK ----
+
+# VISUALISE ----
+
+# raw ----
+
+# rice ----
+
+# ANALYSE ----
+
+# unassisted ----
+
+# assisted ----
+
+## question
+## [...]
+## question
+## [...]
+## 
+## [---]
+### https://chat.openai.com/share/
+### https://g.co/bard/share/
+
+# COMMUNICATE ----
+
+# . ----
+
+# Assets
+
+# names
+df |> 
+  slice(0) |> 
+  glimpse()
+
+# glimpse & skim
+df |>
+  glimpse() |>
+  skim()
+
+# tokenizer
+df |>
+  unnest_tokens(output = word, 
+                input = variable) |>
+  anti_join(stop_words, 
+            by = "word") |>
+  group_by(word) |>
+  summarise(n = n()) |>
+  arrange(desc(n))
+
+# ... ----
