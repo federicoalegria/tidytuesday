@@ -55,4 +55,7 @@ ig |>
 
 ig$summary
 
+ig |> 
+  filter(str_detect(summary, "psych"))
+
 # ... ----
