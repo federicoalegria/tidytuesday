@@ -8,8 +8,9 @@
 pacman::p_load(
   janitor,
   skimr,
-  # tidylog,
-  tidyverse
+  tidytext,
+  tidyverse,
+  wordcloud2
 )
 
 # Data ----
@@ -23,53 +24,35 @@ ig <-
 
 # EXPLORE ----
 
-# TWEAK ----
-
-# VISUALISE ----
-
-# raw ----
-
-# rice ----
-
-# ANALYSE ----
-
-# unassisted ----
-
-# assisted ----
-
-## question
-## [...]
-## question
-## [...]
-## 
-## [---]
-### https://chat.openai.com/share/
-### https://g.co/bard/share/
-
-# COMMUNICATE ----
-
-# . ----
-
-# Assets
-
 # names
-df |> 
+ig |> 
   slice(0) |> 
   glimpse()
 
 # glimpse & skim
-df |>
+ig |>
   glimpse() |>
   skim()
 
-# tokenizer
-df |>
+# VISUALISE ----
+
+# wordcloud
+ig |>
   unnest_tokens(output = word, 
-                input = variable) |>
+                input = summary) |>
   anti_join(stop_words, 
             by = "word") |>
   group_by(word) |>
   summarise(n = n()) |>
-  arrange(desc(n))
+  arrange(desc(n)) |> 
+  wordcloud2(
+    backgroundColor = "#282828",
+    color = "#b16286",
+    rotateRatio = 0
+)
+
+# further ----
+
+ig$summary
 
 # ... ----
