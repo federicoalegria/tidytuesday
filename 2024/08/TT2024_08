@@ -12,7 +12,8 @@ pacman::p_load(
   skimr,
   tidytext,
   tidyverse,
-  wordcloud2
+  wordcloud2,
+  tidylog
 )
 
 # Data ----
@@ -38,22 +39,8 @@ ig |>
 
 # VISUALISE ----
 
-# wordcloud
-ig |>
-  unnest_tokens(output = word, 
-                input = summary) |>
-  anti_join(stop_words, 
-            by = "word") |>
-  group_by(word) |>
-  summarise(n = n()) |>
-  arrange(desc(n)) |> 
-  wordcloud2(
-    backgroundColor = "#282828",
-    color = "#b16286",
-    rotateRatio = 0
-)
+# bi-gram ----
 
-# bi-gram
 ig |> 
   select(summary) |> 
   unnest_ngrams(word, summary, n = 2) |> 
@@ -63,7 +50,8 @@ ig |>
   arrange(desc(n)
 )
 
-## bi-gram objects
+## bi-gram objects ----
+
 ig_bigrams <- ig |> 
   select(summary) |> 
   unnest_ngrams(word, summary, n = 2) |> 
@@ -79,10 +67,9 @@ ig_bigrams_filtered <- ig_bigrams_sep |>
 ig_bigram_counts <- ig_bigrams_filtered |> 
   count(word1, word2, sort = TRUE)
 
-## graph
-
+### graph ----
 ig_bigram_graph <- ig_bigram_counts |> 
-  filter(n > 2) |> 
+  filter(n > 3) |> 
   graph_from_data_frame()
 
 ig_bigram_graph
@@ -91,10 +78,23 @@ set.seed(8080)
 
 ggraph(ig_bigram_graph, layout = "fr") +
   geom_edge_link() +
-  geom_node_point() +
-  geom_node_text(aes(label = name), vjust = 1, hjust = 1)
+  geom_node_point(color = "#000000",
+                  alpha = 0.65,
+                  size = 2) +
+  geom_node_text(aes(label = name, family = "Consolas"), size = 3, vjust = 1, hjust = 1) +
+  labs(
+    title = "common bigrams in summaries listed in the 'R Consortium ISC Grants' data-structure",
+    subtitle = "showing those that occurred more than three times and where neither word was a stop word",
+    caption = "data is an exploration of past grant recipients
+              tidytuesday 2024§08 [https://shorturl.at/dlSUZ]"
+  ) +
+  theme(text = element_text(family = "Consolas"),
+        plot.title = element_text(face = "bold")
+)
 
 a <- grid::arrow(type = "closed", length = unit(.15, "inches"))
+
+set.seed(8080)
 
 ggraph(ig_bigram_graph, layout = "fr") +
   geom_edge_link(
@@ -103,17 +103,20 @@ ggraph(ig_bigram_graph, layout = "fr") +
     arrow = a,
     end_cap = circle(.07, 'inches')
   ) +
-  geom_node_point(color = "#fe8019",
+  geom_node_point(color = "#cc241d",
                   alpha = 0.85,
-                  size = 5) +
-  geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
-  theme_void()
-
-# further ----
-
-ig$summary
-
-ig |> 
-  filter(str_detect(summary, "psych"))
+                  size = 3.5) +
+  geom_node_text(aes(label = name, family = "Consolas"), size = 3, vjust = 1, hjust = 1) +
+  labs(
+    title = "common bigrams in summaries listed in the 'R Consortium ISC Grants' data-structure",
+    subtitle = "showing those that occurred more than three times and where neither word was a stop word",
+    caption = "data is an exploration of past grant recipients
+              tidytuesday 2024§08 [https://shorturl.at/dlSUZ]"
+  ) +
+  theme(text = element_text(family = "Consolas"),
+        plot.title = element_text(face = "bold"),
+        panel.background = element_rect(fill = "#ffffff"),
+        plot.background = element_rect(fill = "#ffffff")
+)
 
 # ... ----
