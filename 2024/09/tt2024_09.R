@@ -7,6 +7,7 @@
 
 pacman::p_load(
   janitor,
+  pointblank,
   skimr,
   tidyverse
 )
@@ -35,6 +36,23 @@ deaths <-
 ## https://shorturl.at/mtTV6 :: dictionary (raw)
 
 # WRANGLE ----
+
+# eda ----
+
+## pointblank validation ----
+
+agent <- 
+  create_agent(
+    tbl = births,
+    tbl_name = "births",
+    label = "VALID-I No. 1"
+  ) %>% 
+  col_is_date(year_birth) %>%
+  col_is_date(year_death) %>%
+  col_is_date(person) %>%
+  interrogate()
+
+agent
 
 # VISUALISE ----
 
@@ -65,17 +83,17 @@ vents |>
 # Assets
 
 # names
-df |> 
+births |> 
   slice(0) |> 
   glimpse()
 
 # glimpse & skim
-df |>
+births |>
   glimpse() |>
   skim()
 
 # tokenizer
-df |>
+births |>
   unnest_tokens(output = word, 
                 input = variable) |>
   anti_join(stop_words, 
