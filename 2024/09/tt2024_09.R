@@ -78,21 +78,25 @@ events |>
   gt() |>
   tab_header(
     title = md("**keyword count excerpt**"),
-    subtitle = md("ai assisted `event-to-keyword` transformation")
+    subtitle = md("for historic events registered on feb 29th")
   ) |>
   tab_source_note(
-    source_note = "tidytuesday 2024§09〔https://shorturl.at/qtFK0〕"
+    source_note = md("ai assisted `event-to-keyword` transformation")
   ) |> 
   tab_source_note(
-    source_note = "ai assistance:〔https://shorturl.at/anwK5〕"
+    source_note = md("tidytuesday **2024§09**`〔https://shorturl.at/qtFK0〕`")
+  ) |> 
+  tab_source_note(
+    source_note = md("**ai assistance**`〔https://shorturl.at/anwK5〕`")
   ) |>
   tab_style(
     style = cell_text(font = system_fonts(name = "monospace-code")),     # https://gt.rstudio.com/reference/opt_table_font.html
     locations = cells_body()
   ) |> 
   opt_table_lines(extent = "all") |>                                     # https://gt.rstudio.com/reference/opt_table_lines.html
-  opt_stylize(style = 6, color = "pink")                                 # https://gt.rstudio.com/reference/opt_stylize.html
-
+  opt_stylize(style = 6, color = "pink"                                  # https://gt.rstudio.com/reference/opt_stylize.html
+)
+              
 # . ----
 
 # --- TIDYTUESDAY::2024§W09 --- #
