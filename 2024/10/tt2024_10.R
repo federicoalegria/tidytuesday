@@ -36,13 +36,33 @@ tw |>
   glimpse() |>
   skim()
 
+# summary statistics
+tw |> 
+  select(weight) |> 
+  drop_na() |> 
+  summarise(mean = mean(weight),
+            median = median(weight),
+            sd = sd(weight),
+            iqr = IQR(weight),
+            min = min(weight),
+            max = max(weight),
+            p25 = quantile(weight, 0.25),
+            p75 = quantile(weight, 0.75)
+)
+
 # Visualise ----
 
 # raw
 
+plot(tw$weight, tw$volume)
+
 # rice
 
 # Analyse ----
+
+# is there a difference between trashweels' consumption?
+## - correlation
+## - lineal multiple regression
 
 # unassisted
 
