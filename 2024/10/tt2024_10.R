@@ -173,104 +173,40 @@ s00 <-
             p75 = quantile(sports_balls, 0.75)
 ) |> knitr::kable()
 
-w00
-v00
-p00
-p01
-c00
-g00
-p02
-w01
-s00
+# brief summary table for metric recollection data
 
 # Open a text file for writing
 sink("summary_statistics.md")
 
-# Print the content of each object
-print("## `weight`")
-print(w00)
-
-print("## `volume`")
-print(v00)
-
-print("## `plastic_bottles`")
-print(p00)
-
-print("## `polystyrene`")
-print(p01)
-
-print("## `cigarette_butts`")
-print(c00)
-
-print("## `glass_bottles`")
-print(g00)
-
-print("## `plastic_bags`")
-print(p02)
-
-print("## `wrappers`")
-print(w01)
-
-print("## `sports_balls`")
-print(s00)
+  # Print the content of each object
+  print("## `weight`")
+  print(w00)
+  
+  print("## `volume`")
+  print(v00)
+  
+  print("## `plastic_bottles`")
+  print(p00)
+  
+  print("## `polystyrene`")
+  print(p01)
+  
+  print("## `cigarette_butts`")
+  print(c00)
+  
+  print("## `glass_bottles`")
+  print(g00)
+  
+  print("## `plastic_bags`")
+  print(p02)
+  
+  print("## `wrappers`")
+  print(w01)
+  
+  print("## `sports_balls`")
+  print(s00)
 
 # Close the text file
 sink()
-
-# homes_powered
-tw |> 
-  select(homes_powered) |> 
-  drop_na() |> 
-  summarise(mean = mean(homes_powered),
-            median = median(homes_powered),
-            sd = sd(homes_powered),
-            iqr = IQR(homes_powered),
-            min = min(homes_powered),
-            max = max(homes_powered),
-            p25 = quantile(homes_powered, 0.25),
-            p75 = quantile(homes_powered, 0.75)
-)
-
-# Visualise ----
-
-# raw
-
-plot(tw$weight, tw$volume)
-
-# rice
-
-# Analyse ----
-
-# is there a difference between trashweels' consumption?
-## - correlation
-## - lineal multiple regression
-
-# unassisted
-
-# pointblank validation
-
-al <- action_levels(warn_at = 0.1, stop_at = 0.2)
-
-agent <-
-  create_agent(
-    tbl = tw,
-    tbl_name = "tw valid",
-    label = "VALID-I Example No. 1",
-    actions = al
-  ) |>
-  col_vals_in_set(id, set = c("mister",
-                              "professor",
-                              "captain",
-                              "gwynnda")
-  ) |>
-  col_is_numeric(columns = c("weight", "volume")) |>
-  col_vals_not_equal(columns = c("weight", "volume"), value = 0) |>
-  interrogate()
-
-## https://www.youtube.com/watch?v=N9kaAiuAbWo
-
-### https://rstudio.github.io/pointblank/reference/col_vals_between.html
-
-# Communicate ----
 
 # ...
