@@ -10,6 +10,7 @@ pacman::p_load(
   janitor,
   skimr,
   tidylog,
+  tidytext,
   tidyverse
 )
 
@@ -25,10 +26,18 @@ fsp <-
 # Wrangle ----
 
 fsp |> 
+  rename(fee_description = fiscal_sponsorship_fee_description) |> 
   rename(criteria = eligibility_criteria) |> 
   rename(types = project_types) |> 
+  rename(sponsorship_model = fiscal_sponsorship_model) |> 
   glimpse() |>
   skim()
+
+fsp |> 
+  rename(criteria = eligibility_criteria) |> 
+  filter(str_detect(criteria, pattern = "programming")) |> 
+  select(criteria) |> 
+  str_view()
 
 # eda ----
 
@@ -43,35 +52,20 @@ fsp |>
   skim()
 
 # tokenizer
-# fsp |>
-#   unnest_tokens(output = word, 
-#                 input = variable) |>
-#   anti_join(stop_words, 
-#             by = "word") |>
-#   group_by(word) |>
-#   summarise(n = n()) |>
-#   arrange(desc(n))
+fsp |>
+  unnest_tokens(output = word,
+                input = eligibility_criteria) |>
+  anti_join(stop_words,
+            by = "word") |>
+  group_by(word) |>
+  summarise(n = n()) |>
+  arrange(desc(n))
 
 # Visualise ----
 
-# raw
-
-# rice
-
-# Analyse ----
-
-# unassisted
-
-# assisted
-
-## question
-## [...]
-## question
-## [...]
-## 
-## [---]
-### https://chat.openai.com/share/
-### https://g.co/bard/share/
+# Cleveland dotplot
+# https://r-graph-gallery.com/303-lollipop-plot-with-2-values.html
+# https://www.data-to-viz.com/graph/lollipop.html
 
 # Communicate ----
 
