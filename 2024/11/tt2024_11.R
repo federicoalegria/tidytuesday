@@ -67,6 +67,10 @@ fsp |>
 # https://r-graph-gallery.com/303-lollipop-plot-with-2-values.html
 # https://www.data-to-viz.com/graph/lollipop.html
 
+# xa "name"
+# ya "year"
+# dot year_00 & year_01
+
 # Communicate ----
 
 # ...
