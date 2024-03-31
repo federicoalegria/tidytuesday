@@ -10,7 +10,8 @@ pacman::p_load(
   janitor,
   skimr,
   tidylog,
-  tidyverse
+  tidyverse,
+  waffle
 )
 
 # data
@@ -44,24 +45,12 @@ mm |>
 
 # Visualise ----
 
-# raw
+# Waffle ----
 
-# rice
+mm |> select(member, 8:12)
 
-# Analyse ----
-
-# unassisted
-
-# assisted
-
-## question
-## [...]
-## question
-## [...]
-## 
-## [---]
-### https://chat.openai.com/share/
-### https://g.co/bard/share/
+mm |> select(member, 8:12) |> 
+  filter(member == "name")
 
 # Communicate ----
 
