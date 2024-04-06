@@ -63,7 +63,9 @@ mm |> select(member, 8:12) |>
                values_to = "value") |>
   filter(member == "scottSummers") |>
   mutate(prop_total = (total / total)) |>
-  mutate(proportion = round(value / total, 3))
+  mutate(proportion = round(value / total, 3)) |>
+  ggplot(aes(fill = decade, y = value, x = member)) + 
+    geom_bar(position = 'dodge', stat = 'identity')
 
 # Communicate ----
 
