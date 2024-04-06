@@ -47,10 +47,23 @@ mm |>
 
 # Waffle ----
 
-mm |> select(member, 8:12)
-
-mm |> select(member, 8:12) |> 
-  filter(member == "name")
+mm |> select(member, 8:12) |>
+  rename(
+    c(
+      "total" = "total_value_heritage",
+      "sixties" = "total_value60s_heritage",
+      "seventies" = "total_value70s_heritage",
+      "eighties" = "total_value80s_heritage",
+      "nineties" = "total_value90s_heritage"
+    )
+  ) |>
+  arrange(desc(total)) |>
+  pivot_longer(cols = sixties:nineties,
+               names_to = "decade",
+               values_to = "value") |>
+  filter(member == "scottSummers") |>
+  mutate(prop_total = (total / total)) |>
+  mutate(proportion = round(value / total, 3))
 
 # Communicate ----
 
