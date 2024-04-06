@@ -45,8 +45,9 @@ mm |>
 
 # Visualise ----
 
-# Waffle ----
+# grouped bar-plots ----
 
+## top gross
 mm |> select(member, 8:12) |>
   rename(
     c(
@@ -61,11 +62,13 @@ mm |> select(member, 8:12) |>
   pivot_longer(cols = sixties:nineties,
                names_to = "decade",
                values_to = "value") |>
-  filter(member == "scottSummers") |>
+  slice(1:20) |>
   mutate(prop_total = (total / total)) |>
-  mutate(proportion = round(value / total, 3)) |>
+  mutate(proportion = round(value / total, 3)) |> 
   ggplot(aes(fill = decade, y = value, x = member)) + 
-    geom_bar(position = 'dodge', stat = 'identity')
+  geom_bar(position = 'dodge', stat = 'identity')
+
+## bottom gross
 
 # Communicate ----
 
