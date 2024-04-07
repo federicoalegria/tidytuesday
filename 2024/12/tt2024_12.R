@@ -314,7 +314,7 @@ p4 <-
                   plot.subtitle = element_text(family = 'Roboto Mono', size = 12),
                   plot.caption = element_text(family = 'Consolas')))
 
-## the least valuable mutants 🚧
+### the least valuable mutants 🚧 ###
 
 ### ...
 
