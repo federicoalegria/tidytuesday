@@ -12,8 +12,9 @@ pacman::p_load(
   scales,
   skimr,
   tidylog,
-  tidyverse,
-  waffle
+  tidyverse
+  # ,
+  # waffle
 )
 
 # data
@@ -99,7 +100,9 @@ mm |> select(member, 8:12) |>
 
 # a patchwork of decades ----
 
-## sixties
+## the most valuable mutants
+
+### sixties
 p1 <- 
   mm |>
   select(member, 8:12) |>
@@ -130,7 +133,7 @@ p1 <-
     proportion = round(value / total, 3)
   ) |>
   ggplot(aes(fill = member, y = value, x = member)) +
-  geom_bar(position = 'dodge', stat = 'identity') +
+  geom_bar(position = 'dodge', stat = 'identity', width = 0.65) +
   geom_text(aes(label = paste0("$", value)),                                             # labels with dollar sign
             vjust = -0.5, size = 3) +                                                    # text position and size
   scale_fill_manual(values = c("#076678", "#9d0006", "#d79921", "#3c3836")) +
@@ -149,7 +152,7 @@ p1 <-
     y = ""
 )
 
-## seventies
+### seventies
 p2 <- 
   mm |>
   select(member, 8:12) |>
@@ -180,7 +183,7 @@ p2 <-
     proportion = round(value / total, 3)
   ) |>
   ggplot(aes(fill = member, y = value, x = member)) +
-  geom_bar(position = 'dodge', stat = 'identity') +
+  geom_bar(position = 'dodge', stat = 'identity', width = 0.65) +
   geom_text(aes(label = paste0("$", value)),                                             # labels with dollar sign
             vjust = -0.5, size = 3) +                                                    # text position and size
   scale_fill_manual(values = c("#076678", "#9d0006", "#d79921", "#3c3836")) +
@@ -199,7 +202,7 @@ p2 <-
     y = ""
 )
 
-## eighties
+### eighties
 p3 <- 
   mm |>
   select(member, 8:12) |>
@@ -230,7 +233,7 @@ p3 <-
     proportion = round(value / total, 3)
   ) |>
   ggplot(aes(fill = member, y = value, x = member)) +
-  geom_bar(position = 'dodge', stat = 'identity') +
+  geom_bar(position = 'dodge', stat = 'identity', width = 0.65) +
   geom_text(aes(label = paste0("$", value)),                                             # labels with dollar sign
             vjust = -0.5, size = 3) +                                                    # text position and size
   scale_fill_manual(values = c("#076678", "#9d0006", "#d79921", "#3c3836")) +
@@ -249,7 +252,7 @@ p3 <-
     y = ""
 )
 
-## nineties
+### nineties
 p4 <-
   mm |>
   select(member, 8:12) |>
@@ -280,7 +283,7 @@ p4 <-
     proportion = round(value / total, 3)
   ) |>
   ggplot(aes(fill = member, y = value, x = member)) +
-  geom_bar(position = 'dodge', stat = 'identity') +
+  geom_bar(position = 'dodge', stat = 'identity', width = 0.65) +
   geom_text(aes(label = paste0("$", value)),                                             # labels with dollar sign
             vjust = -0.5, size = 3) +                                                    # text position and size
   scale_fill_manual(values = c("#076678", "#9d0006", "#d79921", "#3c3836")) +
@@ -301,13 +304,16 @@ p4 <-
 
 p1 + p2 + p3 + p4 +
   plot_annotation(
-    title = "the most valuable X-Men",
+    title = "the most valuable mutants",
     subtitle = "                         accross the decades",
     caption = "tidytuesday 2024§12〔https://shorturl.at/gqxW0〕",
     theme = theme(plot.title = element_text(family = "Roboto Mono", size = 16, face = "bold"),
                   plot.subtitle = element_text(family = "Roboto Mono", size = 12),
                   plot.caption = element_text(family = 'Consolas')))
 
+## the least valuable mutants 🚧
+
+### ...
 
 # waffle - untested due computational limitations
 
