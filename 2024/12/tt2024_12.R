@@ -308,7 +308,7 @@ p4 <-
   plot_layout(ncol = 4) +
   plot_annotation(
     title = "the most valuable mutants",
-    subtitle = "and their decrease accross the decades",
+    subtitle = "and their decrease across the decades",
     caption = "tidytuesday 2024§12〔https://shorturl.at/gqxW0〕",
     theme = theme(plot.title = element_text(family = 'Roboto Mono', size = 16, face = 'bold'),
                   plot.subtitle = element_text(family = 'Roboto Mono', size = 12),
