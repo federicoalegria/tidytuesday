@@ -137,20 +137,20 @@ p1 <-
   geom_text(aes(label = paste0("$", value)),                                             # labels with dollar sign
             vjust = -0.5, size = 3) +                                                    # text position and size
   scale_fill_manual(values = c("#076678", "#9d0006", "#d79921", "#3c3836")) +
-  scale_y_continuous(labels = dollar_format()) +                                         # Format y-axis as USD currency
+  scale_y_continuous(labels = dollar_format()) +                                         # format y-axis as USD currency
   theme_minimal() +
   theme(
-    legend.position = "none",
-    text = element_text(family = 'Roboto Mono'),
-    # font for all text
-    plot.title = element_text(face = "bold",
+    legend.position = 'none',
+    text = element_text(family = 'Roboto Mono'),                                         # font for all text
+    plot.title = element_text(face = 'bold',
                               size = 21)
   ) +
   labs(title = "
     60's",
     x = "",
     y = ""
-)
+  ) +
+  guides(x = guide_axis(angle = -90))
 
 ### seventies
 p2 <- 
@@ -187,20 +187,20 @@ p2 <-
   geom_text(aes(label = paste0("$", value)),                                             # labels with dollar sign
             vjust = -0.5, size = 3) +                                                    # text position and size
   scale_fill_manual(values = c("#076678", "#9d0006", "#d79921", "#3c3836")) +
-  scale_y_continuous(labels = dollar_format()) +                                         # Format y-axis as USD currency
+  scale_y_continuous(labels = dollar_format()) +                                         # format y-axis as USD currency
   theme_minimal() +
   theme(
-    legend.position = "none",
-    text = element_text(family = 'Roboto Mono'),
-    # font for all text
-    plot.title = element_text(face = "bold",
+    legend.position = 'none',
+    text = element_text(family = 'Roboto Mono'),                                         # font for all text
+    plot.title = element_text(face = 'bold',
                               size = 21)
   ) +
   labs(title = "
     70's",
     x = "",
     y = ""
-)
+  ) +
+  guides(x = guide_axis(angle = -90))
 
 ### eighties
 p3 <- 
@@ -237,20 +237,20 @@ p3 <-
   geom_text(aes(label = paste0("$", value)),                                             # labels with dollar sign
             vjust = -0.5, size = 3) +                                                    # text position and size
   scale_fill_manual(values = c("#076678", "#9d0006", "#d79921", "#3c3836")) +
-  scale_y_continuous(labels = dollar_format()) +                                         # Format y-axis as USD currency
+  scale_y_continuous(labels = dollar_format()) +                                         # format y-axis as USD currency
   theme_minimal() +
   theme(
-    legend.position = "none",
-    text = element_text(family = 'Roboto Mono'),
-    # font for all text
-    plot.title = element_text(face = "bold",
+    legend.position = 'none',
+    text = element_text(family = 'Roboto Mono'),                                         # font for all text
+    plot.title = element_text(face = 'bold',
                               size = 21)
   ) +
   labs(title = "
     80's",
     x = "",
     y = ""
-)
+  ) +
+  guides(x = guide_axis(angle = -90))
 
 ### nineties
 p4 <-
@@ -287,28 +287,31 @@ p4 <-
   geom_text(aes(label = paste0("$", value)),                                             # labels with dollar sign
             vjust = -0.5, size = 3) +                                                    # text position and size
   scale_fill_manual(values = c("#076678", "#9d0006", "#d79921", "#3c3836")) +
-  scale_y_continuous(labels = dollar_format()) +                                         # Format y-axis as USD currency
+  scale_y_continuous(labels = dollar_format()) +                                         # format y-axis as USD currency
   theme_minimal() +
   theme(
-    legend.position = "none",
-    text = element_text(family = 'Roboto Mono'),
-    # font for all text
-    plot.title = element_text(face = "bold",
+    legend.position = 'none',
+    text = element_text(family = 'Roboto Mono'),                                         # font for all text
+    plot.title = element_text(face = 'bold',
                               size = 21)
   ) +
   labs(title = "
     90's",
     x = "",
     y = ""
-)
+  ) +
+  guides(x = guide_axis(angle = -90))
 
-p1 + p2 + p3 + p4 +
+# patchwork
+
+(p1 + p2 + p3 + p4) +
+  plot_layout(ncol = 4) +
   plot_annotation(
     title = "the most valuable mutants",
-    subtitle = "                         accross the decades",
+    subtitle = "and their decrease accross the decades",
     caption = "tidytuesday 2024§12〔https://shorturl.at/gqxW0〕",
-    theme = theme(plot.title = element_text(family = "Roboto Mono", size = 16, face = "bold"),
-                  plot.subtitle = element_text(family = "Roboto Mono", size = 12),
+    theme = theme(plot.title = element_text(family = 'Roboto Mono', size = 16, face = 'bold'),
+                  plot.subtitle = element_text(family = 'Roboto Mono', size = 12),
                   plot.caption = element_text(family = 'Consolas')))
 
 ## the least valuable mutants 🚧
