@@ -7,6 +7,7 @@
 
 # packages
 pacman::p_load(
+  easystats,
   gt,
   janitor,
   skimr,
@@ -39,7 +40,7 @@ tr |>
 
 # names
 tr |> 
-  slice(1) |> 
+  slice(1:5) |> 
   glimpse()
 
 # glimpse & skim
@@ -55,6 +56,19 @@ tr |>
   select(c(2, 7:9, 11:18)) |> 
   plot()
 
+tr |> 
+  select(c(7:9, 14:18)) |>
+  mutate(across(where(is.double), as.integer)) |>
+  arrange(desc(games)) |>
+  plot()
+
+tr |> 
+  select(c(7:9, 14:18)) |>
+  mutate(across(where(is.double), as.integer)) |>
+  arrange(desc(games)) |>
+  filter(champ >= 1) |>
+  plot()
+
 # rice
 
 # Analyse ----
@@ -66,10 +80,18 @@ tr |>
 ## question
 ## https://www.perplexity.ai/search/i-have-the-C6Ycn.noR8C.PI5bTuMQBg
 
+## Performance :: model evaluation
 
+lm(w ~ l + r64 + r32 + s16 + e8 + f4 + f2, data = tr) |>
+  check_model()
+
+## Trend Analysis
+
+## ...
 
 # Communicate ----
 
 # ... 
 
 # https://easystats.github.io/performance/
+# https://r-graph-gallery.com/spider-or-radar-chart.html
