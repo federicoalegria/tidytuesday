@@ -7,9 +7,11 @@
 
 # packages
 pacman::p_load(
-  easystats,
+  # easystats,
   gt,
+  ggradar,                                                 # https://github.com/ricardo-bion/ggradar
   janitor,
+  scales,
   skimr,
   tidylog,
   tidyverse
@@ -32,10 +34,6 @@ pp <-
 
 # Wrangle ----
 
-tr |> 
-  select(c(2, 7:9, 11:18)) |> 
-  arrange(desc(champ))
-
 # eda ----
 
 # names
@@ -48,28 +46,47 @@ tr |>
   glimpse() |>
   skim()
 
+# hands-on ----
+
+tr |> 
+  select(c(2, 7:9, 13:17)) |>                              # `games`, `w`, `l`, `s16m`, `e8`, `f4`, `f2`, `champ`
+  mutate(across(where(is.double), as.integer)) |>
+  arrange(desc(champ)) |> 
+  filter(champ >= 2)
+  # plot()
+
 # Visualise ----
 
-# raw
+# radar -----
 
 tr |> 
-  select(c(2, 7:9, 11:18)) |> 
-  plot()
-
-tr |> 
-  select(c(7:9, 14:18)) |>
+  select(c(2, 7:9, 13:17)) |>                              # `games`, `w`, `l`, `s16m`, `e8`, `f4`, `f2`, `champ`
   mutate(across(where(is.double), as.integer)) |>
-  arrange(desc(games)) |>
-  plot()
+  arrange(desc(champ)) |> 
+  filter(champ >= 2) |> 
+  mutate_at(vars(-team), rescale) |> 
+  ggradar(
+    axis.label.size = 3,
+    grid.label.size = 3,
+    grid.line.width = .75,
+    font.radar = ('Roboto Mono'),
+    legend.text.size = 8
+)
+## https://rstudio-pubs-static.s3.amazonaws.com/5795_e6e6411731bb4f1b9cc7eb49499c2082.html
+
+# gt ----
 
 tr |> 
-  select(c(7:9, 14:18)) |>
+  select(c(2, 7:9, 13:17)) |>                              # `games`, `w`, `l`, `s16m`, `e8`, `f4`, `f2`, `champ`
   mutate(across(where(is.double), as.integer)) |>
-  arrange(desc(games)) |>
-  filter(champ >= 1) |>
-  plot()
+  arrange(desc(champ)) |> 
+  filter(champ >= 2) |> 
+  gt()
 
-# rice
+# ... 
+
+# https://easystats.github.io/performance/
+# https://r-graph-gallery.com/spider-or-radar-chart.html
 
 # Analyse ----
 
@@ -88,10 +105,3 @@ lm(w ~ l + r64 + r32 + s16 + e8 + f4 + f2, data = tr) |>
 ## Trend Analysis
 
 ## ...
-
-# Communicate ----
-
-# ... 
-
-# https://easystats.github.io/performance/
-# https://r-graph-gallery.com/spider-or-radar-chart.html
