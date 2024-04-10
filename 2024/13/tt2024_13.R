@@ -23,12 +23,6 @@ tr <-
     'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-03-26/team-results.csv'
   ) |> 
   clean_names()
-
-pp <-
-  readr::read_csv(
-    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-03-26/public-picks.csv'
-  ) |> 
-  clean_names()
 ## https://shorturl.at/akOPR :: dictionary (rich)
 ## https://shorturl.at/bw357 :: dictionary (raw)
 
@@ -57,6 +51,47 @@ tr |>
 
 # Visualise ----
 
+# stacked bar-plot ----
+
+# total count for each team
+tr <- tr |>
+  mutate(count = w + l + s16 + e8 + f4 + f2 + champ) |>
+  arrange(desc(count))
+
+# stacked bars
+ggplot(as.data.frame(tr), aes(x = reorder(team, -count), y = count)) +
+  geom_bar(aes(y = r64, fill = "r64"), stat = "identity", position = "stack") +
+  geom_bar(aes(y = r32, fill = "r32"), stat = "identity", position = "stack") +
+  geom_bar(aes(y = s16, fill = "s16"), stat = "identity", position = "stack") +
+  geom_bar(aes(y = e8, fill = "e8"), stat = "identity", position = "stack") +
+  geom_bar(aes(y = f4, fill = "f4"), stat = "identity", position = "stack") +
+  geom_bar(aes(y = f2, fill = "f2"), stat = "identity", position = "stack") +
+  geom_bar(aes(y = champ, fill = "champ"), stat = "identity", position = "stack") +
+  labs(title = "Stacked Bar Chart",
+       y = "Count",
+       x = "Team") +
+  theme_minimal() +
+  theme(legend.position = "top") +
+  scale_fill_manual(name = "Category",
+                    values = c("r64" = "#7c6f64",
+                               "r32" = "#689d6a",
+                               "s16" = "#b16286",
+                               "e8" = "#458588",
+                               "f4" = "#d79921",
+                               "f2" = "#98971a",
+                               "champ" = "#cc241d")) +
+  guides(x = guide_axis(angle = 90),
+         fill = guide_legend(title = "Category"))
+
+# gt ----
+
+tr |> 
+  select(c(2, 7:9, 13:17)) |>                              # `games`, `w`, `l`, `s16m`, `e8`, `f4`, `f2`, `champ`
+  mutate(across(where(is.double), as.integer)) |>
+  arrange(desc(champ)) |> 
+  filter(champ >= 2) |> 
+  gt()
+
 # radar -----
 
 tr |> 
@@ -73,15 +108,6 @@ tr |>
     legend.text.size = 8
 )
 ## https://rstudio-pubs-static.s3.amazonaws.com/5795_e6e6411731bb4f1b9cc7eb49499c2082.html
-
-# gt ----
-
-tr |> 
-  select(c(2, 7:9, 13:17)) |>                              # `games`, `w`, `l`, `s16m`, `e8`, `f4`, `f2`, `champ`
-  mutate(across(where(is.double), as.integer)) |>
-  arrange(desc(champ)) |> 
-  filter(champ >= 2) |> 
-  gt()
 
 # ... 
 
@@ -105,3 +131,8 @@ lm(w ~ l + r64 + r32 + s16 + e8 + f4 + f2, data = tr) |>
 ## Trend Analysis
 
 ## ...
+
+# Further ----
+
+## gt
+## https://github.com/natrivera/tidytuesday/tree/main/2024/2024-03-26
