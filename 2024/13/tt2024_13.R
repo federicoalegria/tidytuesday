@@ -58,7 +58,7 @@ tr <- tr |>
   mutate(count = w + l + s16 + e8 + f4 + f2 + champ) |>
   arrange(desc(count))
 
-# stacked bars
+# stacked bars - v.0.0
 ggplot(as.data.frame(tr), aes(x = reorder(team, -count), y = count)) +
   geom_bar(aes(y = r64, fill = "r64"), stat = "identity", position = "stack") +
   geom_bar(aes(y = r32, fill = "r32"), stat = "identity", position = "stack") +
@@ -82,6 +82,46 @@ ggplot(as.data.frame(tr), aes(x = reorder(team, -count), y = count)) +
                                "champ" = "#cc241d")) +
   guides(x = guide_axis(angle = 90),
          fill = guide_legend(title = "Category"))
+
+# stacked bars - v.0.1
+tr |>
+  select(c(2, 7:9, 13:17)) |>
+  mutate(across(where(is.double), as.integer)) |>
+  pivot_longer(
+    cols = c(w, l, s16, e8, f4, f2, champ),
+    names_to = "round",
+    values_to = "count"
+  ) |>
+  select(team, round, count) |>
+  filter(round != "w" & round != "l" & count != 0) |>
+  ggplot(aes(x = team, y = count, fill = round)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(x = "Team", y = "Count", fill = "Round") +
+  theme(legend.position = "top",
+        axis.text.x = element_text(angle = 90, hjust = 0))
+
+tr |>  # Original data frame
+  select(c(2, 7:9, 13:17)) |>  # Select specific columns
+  mutate(across(where(is.double), as.integer)) |>  # Convert doubles to integers
+  pivot_longer(
+    cols = c(w, l, s16, e8, f4, f2, champ),
+    names_to = "round",
+    values_to = "count"
+  ) |>  # Reshape data
+  select(team, round, count) |>  # Select relevant columns
+  filter(round != "w" & round != "l" & count != 0) |>  # Filter data
+  group_by(team, round) |>  # Group by team and round to maintain round information
+  summarise(stacked_count = sum(count)) |>  # Calculate stacked count per team and round
+  arrange(team, desc(stacked_count)) |>  # Sort by team then descending stacked count
+  ggplot(aes(x = team, y = stacked_count, fill = round)) +  # Define aesthetics
+  geom_bar(stat = "identity") +  # Create stacked bar chart
+  scale_fill_manual(values = c("red", "blue", "green", "orange", "purple", "brown", "grey")) +  # Define color palette
+  theme_minimal() +  # Set theme
+  labs(x = "Team", y = "Count", fill = "Round") +  # Set labels
+  theme(legend.position = "top",
+        # Set legend position
+        axis.text.x = element_text(angle = 90, hjust = 0))  # Rotate x-axis labels
 
 # gt ----
 
