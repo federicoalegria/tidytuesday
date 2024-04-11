@@ -7,10 +7,7 @@
 
 # packages
 pacman::p_load(
-  gt,
-  ggradar,                                                 # https://github.com/ricardo-bion/ggradar
   janitor,
-  scales,
   skimr,
   tidylog,
   tidyverse
