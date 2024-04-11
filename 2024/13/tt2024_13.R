@@ -7,7 +7,6 @@
 
 # packages
 pacman::p_load(
-  # easystats,
   gt,
   ggradar,                                                 # https://github.com/ricardo-bion/ggradar
   janitor,
@@ -52,13 +51,6 @@ tr |>                                                           # load data
     names_to = "round",
     values_to = "count"
   ) |>                                                          # reshape data
-  mutate(round = factor(round, levels = c("champ", 
-                                          "f2", 
-                                          "f4", 
-                                          "e8", 
-                                          "s16")
-                        )
-  ) |>
   mutate(
     round = case_when(
       round == "champ" ~ "champion",
@@ -69,6 +61,13 @@ tr |>                                                           # load data
       TRUE ~ round
     )
   ) |>
+  mutate(round = factor(round, levels = c("champion", 
+                                          "finals", 
+                                          "final 4", 
+                                          "elite 8", 
+                                          "sweet 16")
+    )
+  ) |> 
   select(team, round, count) |>                                 # select relevant columns
   filter(round != "w" & round != "l" & count != 0) |>           # filter data
   group_by(team, round) |>                                      # group by team and round to maintain round information
