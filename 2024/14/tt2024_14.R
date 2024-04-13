@@ -10,7 +10,8 @@ pacman::p_load(
   janitor,
   skimr,
   tidylog,
-  tidyverse
+  tidyverse,
+  waffle
 )
 
 # data
@@ -30,7 +31,17 @@ dw <-
 
 # waffle
 
-
+dw |> 
+  mutate(count = percentage * 100) |> 
+  mutate(total = sum(count),
+         prop = round((count / total) * 100)) |>
+  select(!"total") |>
+  ggplot(aes(fill = occupation,
+             values = prop)) +
+  geom_waffle(
+    n_rows = 8,
+    size = 0.33
+  )
 
 
 # ...
