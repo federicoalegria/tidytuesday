@@ -33,7 +33,7 @@ dw <-
 # waffle
 
 dw |>
-  mutate(count = percentage * 100) |>
+  mutate(count = percentage * 100) |> # expand dbl to integer
   mutate(total = sum(count),
          prop = round((count / total) * 100)) |>
   select(!"total") |>
