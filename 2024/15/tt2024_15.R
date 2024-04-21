@@ -168,7 +168,7 @@ vis <-
   facet_wrap(
   vars(var), nrow = 2
   ) +
-  theme_minimal(base_family = my_font) +
+  theme_minimal(base_family = 'Consolas') +
   theme(
     legend.position = "top",
     legend.title.position = "top",
@@ -176,8 +176,8 @@ vis <-
     axis.text = element_blank(),
     panel.spacing = unit(1, "lines"),
     panel.grid = element_blank(),
-    plot.title    = element_text(size = 26, family = 'Roboto Mono', face = "bold", hjust = .5),
-    plot.subtitle = element_markdown(size = 9, family = 'Roboto mono', margin = margin(b = 11), hjust = .5),
+    plot.title    = element_text(size = 26, family = 'Consolas', face = "bold", hjust = .5),
+    plot.subtitle = element_markdown(size = 9, family = 'Consolas', margin = margin(b = 11), hjust = .5),
     plot.caption  = element_markdown(size = 6, family = 'Consolas', margin = margin(t = 10), hjust = 0),
     plot.title.position = "plot",
     plot.caption.position = "plot",
@@ -196,7 +196,7 @@ vis <-
 )
 
 ggsave(
-  plot = vis, filename = "Rplot.png",
+  plot = vis, filename = "tt2024_15.map.png",
   width = 16, height = 10, units = "in", dpi = 600
 )
 
