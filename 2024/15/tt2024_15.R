@@ -239,4 +239,4 @@ ggsave(
 
 # Communicate ----
 
-# .for #tidytuesday 2024§15, i forked Nikos Pechlivanis' (@npechl) visualisation. while twisting it to my taste, i learned a thing or two about spatial data. OP: https://twitter.com/npechl/status/1779567698050977924/photo/1; fork: https://github.com/federicoalegria/_tidytuesday/edit/main/2024/15/tt2024_15.R
+# .for #tidytuesday 2024§15, i forked Nikos Pechlivanis' (@npechl) visualisation. while twisting it to my taste, i learned a thing or two about spatial data. OP: https://twitter.com/npechl/status/1779567698050977924/photo/1; fork: https://github.com/federicoalegria/_tidytuesday/tree/main/2024/15
