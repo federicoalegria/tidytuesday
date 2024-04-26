@@ -5,17 +5,18 @@
 
 # Load ----
 
-# packages
+# packages ----
 pacman::p_load(
+  data.table,
   janitor,
   skimr,
   tidylog,
   tidyverse
 )
 
-# data
+# data ----
 df <-
-  readr::read_csv(
+  fread(
     'link.csv'
   ) |>
   clean_names()
@@ -60,10 +61,7 @@ df |>
 
 ## question
 ## [...]
-## question
-## [...]
-## 
-## [---]
+
 ### https://chat.openai.com/share/
 ### https://g.co/bard/share/
 
