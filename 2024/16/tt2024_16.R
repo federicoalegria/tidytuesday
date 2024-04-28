@@ -11,6 +11,7 @@ pacman::p_load(
   janitor,
   skimr,
   tidylog,
+  tidytext,
   tidyverse
 )
 
@@ -32,12 +33,12 @@ d1 <-
 # eda ----
 
 # names
-d0 |> 
+d1 |> 
   slice(0) |> 
   glimpse()
 
 # glimpse & skim
-d0 |>
+d1 |>
   glimpse() |>
   skim()
 
@@ -75,3 +76,16 @@ d0 |>
 # Communicate ----
 
 # ...
+
+# head
+d1 |> 
+  group_by(author) |> 
+  summarise(n = n()) |> 
+  arrange(desc(n)) |> 
+  head()
+
+d1 |> 
+  filter(author == "Kartikeya Bolar") |> 
+  select(package)
+
+# package names by top authors
