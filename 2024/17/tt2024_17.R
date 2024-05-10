@@ -8,6 +8,7 @@
 pacman::p_load(
   data.table,
   ggbump,
+  ggdark,
   ggthemes,
   janitor,
   patchwork,
@@ -41,6 +42,7 @@ df |>
 
 # Visualise ----
 
+# raw ----
 df |> 
   filter(str_detect(entity, "sat")) |> 
   ggplot(aes(
@@ -51,44 +53,32 @@ df |>
   geom_bump() +
   geom_point()
 
-# inspo
+## inspo
 
-# https://github.com/federicoalegria/_tidytuesday/tree/main/2023/45
-## https://www.perplexity.ai/search/with-the-following-.gxOa7QySdqrrnw23MFceg
+## https://github.com/federicoalegria/_tidytuesday/tree/main/2023/45
+### https://www.perplexity.ai/search/with-the-following-.gxOa7QySdqrrnw23MFceg
 
-# ...
+# rice ----
 
-# further
-
-## wtf?
-## patrones en la basura :: instituciones privadas de tipo "sat"
-
-df_rank <-
-  df |>
-  filter(entity != "World") |>
-  group_by(year) |> 
-  mutate(rank = rank(num_objects)) |> 
-  arrange(desc(rank))
-
-df_rank |>
-  filter(rank <= 4) |>
-  select(entity, year, num_objects) |>
-  summarise(count = sum(num_objects), .by = c(year, entity)) |>
-  filter(count >= 2) |>
-  mutate(rank = row_number(desc(count)), .by = year) |>
-  ggplot(aes(x = year, 
-             y = rank, color = entity)) +
+# dark
+df |> 
+  filter(str_detect(entity, "sat")) |> 
+  ggplot(aes(
+    x = year,
+    y = num_objects,
+    colour = entity)
+  ) +
   geom_point() +
   geom_bump(linewidth = 0.75) +
-  scale_x_continuous(breaks = seq(1960, 2022, 2)) +
+  scale_x_continuous(breaks = seq(1965, 2023, 2)) +
+  scale_y_continuous(breaks = seq(1:4), 1) +
   coord_cartesian(
-    xlim = c(1959, 2023),
-    ylim = c(0.5, 3.5),
-    expand = FALSE
+    xlim = c(1964, 2024),
+    ylim = c(0.5, 5.5),
+    expand = TRUE
   ) +
-  scale_y_reverse() +
   theme_void(base_size = 13) +
-  theme(legend.position = "none") +
+  # theme(legend.position = "none") +
   labs(
     title = " ",
     subtitle = " ",
@@ -96,18 +86,49 @@ df_rank |>
   ) +
   scale_colour_manual(
     values = c(
-      "#B0161E",
-      "#cf7378",
-      "#0b2443",
-      "#719a67",
-      "#800000",
-      "#706226",
-      "#ffd700",
-      "#5e5e5e",
-      "#CC6699",
-      "#f4563b",
-      "#BD0A36",
-      "#F4737A"
+      "#8Be9fd",
+      "#bd93f9",
+      "#ff79c6",
+      "#f8f8f2"
+    )
+  ) +
+  dark_theme_minimal() +
+  theme(
+    legend.title = element_text(size = 13),
+    plot.caption = element_text(size = 10),
+    plot.subtitle = element_text(size = 16)
+)
+
+# light
+df |> 
+  filter(str_detect(entity, "sat")) |> 
+  ggplot(aes(
+    x = year,
+    y = num_objects,
+    colour = entity)
+  ) +
+  geom_point() +
+  geom_bump(linewidth = 0.75) +
+  scale_x_continuous(breaks = seq(1965, 2023, 2)) +
+  scale_y_continuous(breaks = seq(1:4), 1) +
+  coord_cartesian(
+    xlim = c(1964, 2024),
+    ylim = c(0.5, 5.5),
+    expand = TRUE
+  ) +
+  theme_void(base_size = 13) +
+  # theme(legend.position = "none") +
+  labs(
+    title = " ",
+    subtitle = " ",
+    caption = " "
+  ) +
+  scale_colour_manual(
+    values = c(
+      "#458588",
+      "#b16286",
+      "#689d6a",
+      "#7c6f64"
     )
   ) +
   theme_wsj() +
@@ -115,4 +136,9 @@ df_rank |>
     legend.title = element_text(size = 13),
     plot.caption = element_text(size = 10),
     plot.subtitle = element_text(size = 16)
-  )
+)
+
+# further ----
+
+## wtf?
+## patrones en la basura :: instituciones privadas de tipo "sat"
