@@ -8,7 +8,6 @@
 pacman::p_load(
   data.table,
   ggbump,
-  ggdark,
   ggthemes,
   janitor,
   patchwork,
@@ -60,7 +59,6 @@ df |>
 
 # rice ----
 
-# dark
 df |> 
   filter(str_detect(entity, "sat")) |> 
   ggplot(aes(
@@ -69,76 +67,39 @@ df |>
     colour = entity)
   ) +
   geom_point() +
-  geom_bump(linewidth = 0.75) +
+  geom_bump(linewidth = 1) +
   scale_x_continuous(breaks = seq(1965, 2023, 2)) +
   scale_y_continuous(breaks = seq(1:4), 1) +
   coord_cartesian(
     xlim = c(1964, 2024),
-    ylim = c(0.5, 5.5),
+    ylim = c(0.5, 4),
     expand = TRUE
   ) +
-  theme_void(base_size = 13) +
-  # theme(legend.position = "none") +
   labs(
-    title = " ",
-    subtitle = " ",
-    caption = " "
+    title = "
+    annual number of objects launched into space 
+    by Arabsat, Eutelsat, Inmarsat and Intelsat",
+    subtitle = "
+     objects are defined here as satellites, probes, landers, 
+     crewed spacecrafts, and space station flight elements 
+     launched into Earth orbit or beyond
+    ",
+    caption = "
+    tidytuesday 2024§17〔https://shorturl.at/cfHI0〕"
   ) +
   scale_colour_manual(
     values = c(
-      "#8Be9fd",
-      "#bd93f9",
-      "#ff79c6",
-      "#f8f8f2"
-    )
-  ) +
-  dark_theme_minimal() +
-  theme(
-    legend.title = element_text(size = 13),
-    plot.caption = element_text(size = 10),
-    plot.subtitle = element_text(size = 16)
-)
-
-# light
-df |> 
-  filter(str_detect(entity, "sat")) |> 
-  ggplot(aes(
-    x = year,
-    y = num_objects,
-    colour = entity)
-  ) +
-  geom_point() +
-  geom_bump(linewidth = 0.75) +
-  scale_x_continuous(breaks = seq(1965, 2023, 2)) +
-  scale_y_continuous(breaks = seq(1:4), 1) +
-  coord_cartesian(
-    xlim = c(1964, 2024),
-    ylim = c(0.5, 5.5),
-    expand = TRUE
-  ) +
-  theme_void(base_size = 13) +
-  # theme(legend.position = "none") +
-  labs(
-    title = " ",
-    subtitle = " ",
-    caption = " "
-  ) +
-  scale_colour_manual(
-    values = c(
+      "#ea6962",
+      "#d8a657",
       "#458588",
-      "#b16286",
-      "#689d6a",
-      "#7c6f64"
+      "#3c3836"
     )
   ) +
   theme_wsj() +
   theme(
-    legend.title = element_text(size = 13),
+    legend.title = element_text(family = 'Consolas', size = 10),
+    plot.title = element_text(size = 16),
+    plot.title.position = 'plot',
     plot.caption = element_text(size = 10),
-    plot.subtitle = element_text(size = 16)
+    plot.subtitle = element_text(size = 13),
 )
-
-# further ----
-
-## wtf?
-## patrones en la basura :: instituciones privadas de tipo "sat"
