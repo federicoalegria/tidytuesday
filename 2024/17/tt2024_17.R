@@ -41,24 +41,6 @@ df |>
 
 # Visualise ----
 
-# raw ----
-df |> 
-  filter(str_detect(entity, "sat")) |> 
-  ggplot(aes(
-    x = year,
-    y = num_objects,
-    colour = entity)
-  ) +
-  geom_bump() +
-  geom_point()
-
-## inspo
-
-## https://github.com/federicoalegria/_tidytuesday/tree/main/2023/45
-### https://www.perplexity.ai/search/with-the-following-.gxOa7QySdqrrnw23MFceg
-
-# rice ----
-
 # light
 df |> 
   filter(str_detect(entity, "sat")) |> 
@@ -115,7 +97,7 @@ df |>
   ) +
   geom_point() +
   geom_bump(linewidth = 1) +
-  scale_x_continuous(breaks = seq(1965, 2023, 2), labels = scales::number_format()) +
+  scale_x_continuous(breaks = seq(1965, 2023, 2)) +
   scale_y_continuous(breaks = seq(1:4), 1) +
   coord_cartesian(
     xlim = c(1964, 2024),
@@ -144,16 +126,16 @@ df |>
   ) +
   theme_wsj(color = "#44475a") +
   theme(
-    plot.background = element_rect(fill = "#44475a", color = "#44475a"),
-    panel.background = element_rect(fill = "#44475a", color = "#44475a"),
-    panel.grid.major.y = element_line(color = "#f8f8f2", linetype = "dotted"),
-    legend.text = element_text(color = "#f8f8f2"),
-    legend.title = element_text(family = 'Consolas', size = 10, color = "#f8f8f2"),
-    axis.line.x = element_line(color = "#f8f8f2"),
-    axis.ticks = element_line(color = "#f8f8f2"),
-    axis.text = element_text(size = 10, color = "#f8f8f2"),
-    plot.title = element_text(size = 16, color = "#f8f8f2"),
+    axis.line.x = element_line(colour = "#f8f8f2"),
+    axis.text = element_text(colour = "#f8f8f2"),
+    axis.ticks = element_line(colour = "#f8f8f2"),
+    legend.text = element_text(colour = "#f8f8f2"),
+    legend.title = element_text(family = 'Consolas', size = 10, colour = "#f8f8f2"),
+    panel.background = element_rect(fill = "#44475a", colour = "#44475a"),
+    panel.grid.major.y = element_line(colour = "#f8f8f2", linetype = 'dotted'),
+    plot.background = element_rect(fill = "#44475a", colour = "#44475a"),
+    plot.caption = element_text(size = 10, colour = "#f8f8f2"),
+    plot.subtitle = element_text(size = 13, colour = "#f8f8f2"),
+    plot.title = element_text(size = 16, colour = "#f8f8f2"),
     plot.title.position = 'plot',
-    plot.caption = element_text(size = 10, color = "#f8f8f2"),
-    plot.subtitle = element_text(size = 13, color = "#f8f8f2"),
 )
