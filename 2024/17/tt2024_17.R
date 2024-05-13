@@ -59,6 +59,7 @@ df |>
 
 # rice ----
 
+# light
 df |> 
   filter(str_detect(entity, "sat")) |> 
   ggplot(aes(
@@ -102,4 +103,57 @@ df |>
     plot.title.position = 'plot',
     plot.caption = element_text(size = 10),
     plot.subtitle = element_text(size = 13),
+)
+
+# dark
+df |> 
+  filter(str_detect(entity, "sat")) |> 
+  ggplot(aes(
+    x = year,
+    y = num_objects,
+    colour = entity)
+  ) +
+  geom_point() +
+  geom_bump(linewidth = 1) +
+  scale_x_continuous(breaks = seq(1965, 2023, 2), labels = scales::number_format()) +
+  scale_y_continuous(breaks = seq(1:4), 1) +
+  coord_cartesian(
+    xlim = c(1964, 2024),
+    ylim = c(0.5, 4),
+    expand = TRUE
+  ) +
+  labs(
+    title = "
+    annual number of objects launched into space 
+    by Arabsat, Eutelsat, Inmarsat and Intelsat",
+    subtitle = "
+     objects are defined here as satellites, probes, landers, 
+     crewed spacecrafts, and space station flight elements 
+     launched into Earth orbit or beyond
+    ",
+    caption = "
+    tidytuesday 2024§17〔https://shorturl.at/cfHI0〕"
+  ) +
+  scale_colour_manual(
+    values = c(
+      "#50fa7b",
+      "#8be9fd",
+      "#bd93f9",
+      "#ff79c6"
+    )
+  ) +
+  theme_wsj(color = "#44475a") +
+  theme(
+    plot.background = element_rect(fill = "#44475a", color = "#44475a"),
+    panel.background = element_rect(fill = "#44475a", color = "#44475a"),
+    panel.grid.major.y = element_line(color = "#f8f8f2", linetype = "dotted"),
+    legend.text = element_text(color = "#f8f8f2"),
+    legend.title = element_text(family = 'Consolas', size = 10, color = "#f8f8f2"),
+    axis.line.x = element_line(color = "#f8f8f2"),
+    axis.ticks = element_line(color = "#f8f8f2"),
+    axis.text = element_text(size = 10, color = "#f8f8f2"),
+    plot.title = element_text(size = 16, color = "#f8f8f2"),
+    plot.title.position = 'plot',
+    plot.caption = element_text(size = 10, color = "#f8f8f2"),
+    plot.subtitle = element_text(size = 13, color = "#f8f8f2"),
 )
