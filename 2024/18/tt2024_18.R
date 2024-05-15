@@ -7,9 +7,9 @@
 # packages ----
 pacman::p_load(
   data.table,
+  gt,
   janitor,
   skimr,
-  tidylog,
   tidyverse
 )
 
@@ -51,12 +51,6 @@ df |>
 
 # Visualise ----
 
-# raw
-
-# rice
-
-# ...
-
 df2 |>
   select(
     short_name,
@@ -74,3 +68,31 @@ df2 |>
   arrange(desc(latest_population_census_year)) |>
   filter(latest_population_census_year >= 2020) |> 
   knitr::kable()
+
+df2 |>
+  select(
+    short_name,
+    latest_population_census_year
+  ) |>
+  arrange(desc(latest_population_census_year)) |>
+  filter(is.na(latest_population_census_year))
+
+df2 |>
+  select(short_name, latest_population_census_year) |>
+  filter(latest_population_census_year < 2010) |>
+  pivot_wider(names_from = latest_population_census_year, values_from = latest_population_census_year) |>
+  select(
+    short_name,
+    `2009`,
+    `2008`,
+    `2007`,
+    `2006`,
+    `2004`,
+    `2003`,
+    `1997`,
+    `1989`,
+    `1987`,
+    `1979`,
+    `1943`
+  ) |>
+  gt()
