@@ -32,67 +32,52 @@ df2 <-
   ) |>
   clean_names()
 
-## https://shorturl.at/motC2 :: dictionary (rich)
-## https://shorturl.at/nCQR7 :: dictionary (raw)
+## https://t.ly/_F0Ci :: dictionary (rich)
+## https://t.ly/uhFdG :: dictionary (raw)
 
 # Wrangle ----
 
 # eda ----
 
 # names
-df |> 
+df2 |> 
   slice(0) |> 
   glimpse()
 
 # glimpse & skim
-df |>
+df2 |>
   glimpse() |>
   skim()
 
 # Visualise ----
 
 df2 |>
-  select(
-    short_name,
-    latest_population_census_year
+  select(country = short_name,
+         year = latest_population_census_year,
   ) |>
-  arrange(latest_population_census_year) |>
-  slice(1:11) |>
-  knitr::kable()
-
-df2 |>
-  select(
-    short_name,
-    latest_population_census_year
-  ) |>
-  arrange(desc(latest_population_census_year)) |>
-  filter(latest_population_census_year >= 2020) |> 
-  knitr::kable()
-
-df2 |>
-  select(
-    short_name,
-    latest_population_census_year
-  ) |>
-  arrange(desc(latest_population_census_year)) |>
-  filter(is.na(latest_population_census_year))
-
-df2 |>
-  select(short_name, latest_population_census_year) |>
-  filter(latest_population_census_year < 2010) |>
-  pivot_wider(names_from = latest_population_census_year, values_from = latest_population_census_year) |>
-  select(
-    short_name,
-    `2009`,
-    `2008`,
-    `2007`,
-    `2006`,
-    `2004`,
-    `2003`,
-    `1997`,
-    `1989`,
-    `1987`,
-    `1979`,
-    `1943`
-  ) |>
-  gt()
+  mutate(
+    country = case_when(
+      country == "Lebanon" ~ "🇱🇧 Lebanon",
+      country == "Afghanistan" ~ "🇦🇫 Afghanistan",
+      country == "Somalia" ~ "🇸🇴 Somalia",
+      country == "Uzbekistan" ~ "🇺🇿 Uzbekistan",
+      country == "Iraq" ~ "🇮🇶 Iraq",
+      country == "Central African Republic" ~ "🇨🇫 Central African Republic",
+      country == "Haiti" ~ "🇭🇹 Haiti",
+      country == "Syrian Arab Republic" ~ "🇸🇾 Syrian Arab Republic",
+      country == "Yemen" ~ "🇾🇪 Yemen",
+      country == "Libya" ~ "🇱🇾 Libya"
+    )
+  ) |> 
+  arrange(year) |>
+  slice(1:10) |>
+  gt() |> 
+  tab_header(title = md("**top ten countries**"),
+             subtitle = md("**with oldest census data**")
+  ) |> 
+  cols_label(
+    country = md("**country**"),
+    year = md("**year**")
+  ) |> 
+  tab_source_note(source_note = "source ::〔https://t.ly/uhFdG〕") |> 
+  gtsave("tt2024_18.gt.png", expand = 10)
