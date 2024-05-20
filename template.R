@@ -19,8 +19,8 @@ df <-
     'link.csv'
   ) |>
   clean_names()
-## https://shorturl.at/ :: dictionary (rich)
-## https://shorturl.at/ :: dictionary (raw)
+# dictionary
+# https://raw.
 
 # Wrangle ----
 
@@ -58,11 +58,9 @@ df |>
 
 # assisted
 
-## question
-## [...]
-
 ### https://chat.openai.com/share/
-### https://g.co/bard/share/
+### https://gemini.google.com/app/
+### https://www.perplexity.ai/share/
 
 # Communicate ----
 
