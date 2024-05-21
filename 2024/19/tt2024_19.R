@@ -50,7 +50,7 @@ df |>
 
 ### https://chat.openai.com/share/
 ### https://g.co/bard/share/
-### https://www.perplexity.ai/
+### https://www.perplexity.ai/search/i-have-this-9nsDJ9I.QAOCALk0_yxW5g
 
 # Communicate ----
 
@@ -61,3 +61,7 @@ df |>
 
 df |> 
   filter(str_detect(genre, pattern = "Jazz"))
+
+## ggbump
+# terminal :: find . -type f -exec grep -l "ggbump" {} \;
+# terminal :: find . -type f -exec grep --color=auto -C 2 "ggbump" {} \;
