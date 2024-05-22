@@ -7,10 +7,13 @@
 # packages ----
 pacman::p_load(
   data.table,
+  ggridges,
+  ggthemes,
   janitor,
   skimr,
   tidylog,
-  tidyverse
+  tidyverse,
+  viridis
 )
 
 # data ----
@@ -36,32 +39,73 @@ df |>
   glimpse() |>
   skim()
 
+df |> 
+  select(genre) |> 
+  group_by(genre) |> 
+  summarise(n = n()) |> 
+  arrange(desc(n)) |> 
+  filter(!(genre %in% c(
+    "", "Punk/Post-Punk/New Wave/Power Pop")                    # filter unlabelled and oddly labelled
+    )
+  )
+
+df |>
+  mutate(genre = factor(genre,
+                        levels = unique(genre))) |>
+  filter(!(genre %in% c(
+    "", "Punk/Post-Punk/New Wave/Power Pop"))) |> 
+  group_by(genre) |> 
+  summarise(n = n()) |> 
+  filter(n >= 10)
+
 # Visualise ----
 
-# raw
-
-# rice
-
-# Analyse ----
-
-# unassisted
-
-# assisted
-
-### https://chat.openai.com/share/
-### https://g.co/bard/share/
-### https://www.perplexity.ai/search/i-have-this-9nsDJ9I.QAOCALk0_yxW5g
-
-# Communicate ----
+df |>
+  mutate(genre = factor(genre,
+                        levels = unique(genre))) |>
+  filter((
+    genre %in% c(
+      "Big Band/Jazz",
+      "Blues/Blues Rock",
+      "Country/Folk/Country Rock/Folk Rock",
+      "Electronic",
+      "Funk/Disco ",
+      "Hard Rock/Metal",
+      "Hip-Hop/Rap",
+      "Indie/Alternative Rock",
+      "Rock n' Roll/Rhythm & Blues",
+      "Singer-Songwriter/Heartland Rock",
+      "Soul/Gospel/R&B"
+    )
+  )) |>
+  arrange(genre) |>
+  ggplot(aes(x = ave_age_at_top_500,
+             y = genre)) +
+  geom_density_ridges(aes(fill = genre),
+                      alpha = 0.7) +
+  scale_fill_manual(values = inferno(18)) +
+  labs(
+    title = "Rolling Stone Album Rankings",
+    subtitle = "average age at top 500 by top genres
+    ",
+    caption = "tidytuesday 2024§19〔https://t.ly/GEuCP〕",
+    x = "average years",
+    y = ""
+  ) +
+  theme_wsj(color = 'gray') +
+  theme(
+    legend.position = "none",
+    text = element_text(color = "#282828"),
+    axis.text = element_text(color = "#282828", family = "Roboto"),
+    plot.title = element_text(color = "#282828", family = "Roboto Bold", size = 18),
+    plot.subtitle = element_text(color = "#282828", family = "Roboto", size = 15),
+    plot.caption = element_text(color = "#282828", family = "Monospace", size = 9),
+    axis.title = element_text(color = "#282828", family = "Roboto", size = 13)
+)
 
 # ...
 
-df |> 
-  filter(clean_name == "Pink Floyd")
-
-df |> 
-  filter(str_detect(genre, pattern = "Jazz"))
-
-## ggbump
-# terminal :: find . -type f -exec grep -l "ggbump" {} \;
-# terminal :: find . -type f -exec grep --color=auto -C 2 "ggbump" {} \;
+## ggridges
+# terminal :: find . -type f -exec grep -l "Dwali" {} \;
+# terminal :: find . -type f -exec grep -l "ggridges" {} \;
+# terminal :: find . -type f -exec grep --color=auto -C 2 "ggridges" {} \;
