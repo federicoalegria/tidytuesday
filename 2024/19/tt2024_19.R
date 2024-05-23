@@ -46,7 +46,7 @@ df |>
   arrange(desc(n)) |> 
   filter(!(genre %in% c(
     "", "Punk/Post-Punk/New Wave/Power Pop")                    # filter unlabelled and oddly labelled
-    )
+  )
   )
 
 df |>
@@ -82,11 +82,12 @@ df |>
   ggplot(aes(x = ave_age_at_top_500,
              y = genre)) +
   geom_density_ridges(aes(fill = genre),
-                      alpha = 0.7) +
-  scale_fill_manual(values = inferno(18)) +
+                      alpha = 0.75) +
+  scale_fill_manual(values = mako(13)) +
   labs(
     title = "Rolling Stone Album Rankings",
-    subtitle = "average age at top 500 by top genres
+    subtitle = "average age in years inside top 500 by popular genres
+    
     ",
     caption = "tidytuesday 2024§19〔https://t.ly/GEuCP〕",
     x = "average years",
@@ -94,13 +95,13 @@ df |>
   ) +
   theme_wsj(color = 'gray') +
   theme(
-    legend.position = "none",
+    axis.text = element_text(color = "#282828", family = 'Roboto'),
+    axis.title = element_text(color = "#282828", family = 'Roboto', size = 11),
+    legend.position = 'none',
+    plot.title = element_text(color = "#282828", family = 'Roboto Bold', size = 18),
+    plot.subtitle = element_text(color = "#282828", family = 'Roboto', size = 13),
+    plot.caption = element_text(color = "#282828", family = 'Roboto Mono', size = 9),
     text = element_text(color = "#282828"),
-    axis.text = element_text(color = "#282828", family = "Roboto"),
-    plot.title = element_text(color = "#282828", family = "Roboto Bold", size = 18),
-    plot.subtitle = element_text(color = "#282828", family = "Roboto", size = 15),
-    plot.caption = element_text(color = "#282828", family = "Monospace", size = 9),
-    axis.title = element_text(color = "#282828", family = "Roboto", size = 13)
 )
 
 # ...
