@@ -74,17 +74,16 @@ chisq.test(df_sp$strength, df_sp$political_affiliation)
 
 vcd::assocstats(table(df_sp$strength, df_sp$political_affiliation))
 
+set.seed(31416)
+
 ggbarstats(df_sp, 
            x = strength, 
            y = political_affiliation,
-           type = 'nonparametric')
-
-# favourite coffee drink among home and in-person workers
-# Cleaveland plot
-# tt2024_11
-
-df |> 
-  select(2:19)
+           type = 'nonparametric',
+           title = "differences in caffeine choices by political affiliation",
+           legend.title = NULL,
+           xlab = "political affiliation",
+           ylab = NULL)
 
 # Communicate ----
 
