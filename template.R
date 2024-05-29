@@ -9,7 +9,6 @@ pacman::p_load(
   data.table,
   janitor,
   skimr,
-  tidylog,
   tidyverse
 )
 
