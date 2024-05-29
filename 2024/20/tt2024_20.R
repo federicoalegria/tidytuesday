@@ -44,17 +44,11 @@ df |>
   slice(28, 35, 50) |> 
   glimpse()
 
-# Visualise ----
-
-# raw
-
-# rice
-
 # Analyse ----
 
-# differences ----
+# unassisted ----
 
-# among caffeine preferences by political affiliation
+# differences among caffeine preferences by political affiliation
 df_sp <- 
   df |> 
   select(strength, political_affiliation) |> 
@@ -66,12 +60,11 @@ df_sp <-
       strength == "Somewhat strong" ~ "strong",
       strength == "Very strong" ~ "strong"
     )
-  )
+)
 
+# coffee strength preferences' variation for different political affiliations
 table(df_sp$strength, df_sp$political_affiliation)
-
 chisq.test(df_sp$strength, df_sp$political_affiliation)
-
 vcd::assocstats(table(df_sp$strength, df_sp$political_affiliation))
 
 set.seed(31416)
@@ -80,13 +73,34 @@ ggbarstats(df_sp,
            x = strength, 
            y = political_affiliation,
            type = 'nonparametric',
-           title = "differences in caffeine choices by political affiliation",
+           title = "coffee strength preferences' variation for different political affiliations",
            legend.title = NULL,
            xlab = "political affiliation",
            ylab = NULL)
+## https://indrajeetpatil.github.io/ggstatsplot/reference/ggbarstats.html
+
+# assisted
+
+## what's the null hypothesis for a chi-square test in which data comes from two categorical variables?
+### https://search.brave.com/search?q=what%27s+the+null+hypothesis+for+a+chi-square+test+in+which+data+comes+from+two+categorical+variables%3F
+
+## how should i interpret the following result?
+##   
+## Pearson's Chi-squared test
+## 
+## data:  df_sp$strength and df_sp$political_affiliation
+## X-squared = 10.535, df = 6, p-value = 0.1039
+### https://chatgpt.com/c/9d0a233c-1112-44d8-a50c-44906a92219b
 
 # Communicate ----
 
+# for tidytuesday 2024§20 
+# i explored if there's any variation in coffee strength preferences'
+# for different political affiliations. after shapeshifting caffeine
+# preferments, there's a 10.39% probability that the observed differences in
+# taste across different segments could have occurred by chance alone.
+
 # submission
+## https://github.com/federicoalegria/_tidytuesday/edit/main/2024/20/tt2024_20.R
 
 # ...
