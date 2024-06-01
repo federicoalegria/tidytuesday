@@ -7,6 +7,7 @@
 # packages ----
 pacman::p_load(
   data.table,
+  easystats,
   ggthemes,
   janitor,
   skimr,
@@ -60,6 +61,9 @@ df |>
 
 # Visualise ----
 
+# for quarto slides ----
+
+# vis_01
 df |> 
   group_by(commodity) |>
   summarize(
@@ -109,6 +113,57 @@ df |>
        caption = "tidytuesday 2024§21〔https://〕"
 )
 
+# natural gas sounds green right?
+# and also young when put in perspective;
+# speaking if which
+
+# vis_02
+df |> 
+  filter(commodity == "Natural Gas") |> 
+  ggplot(aes(x = production_value,
+             y = total_emissions_mt_co2e)) +
+  geom_point() +
+  theme_wsj()
+
+# vis_03
+df |> 
+  ggplot(aes(x = production_value,
+             y = total_emissions_mt_co2e)) +
+  geom_point() +
+  facet_wrap(production_unit ~ .) +
+  theme_wsj()
+
+# "Bcf/yr" :: billion cubic feet per year (used for natural gas)
+# "Million bbl/yr" :: million barrels per year (used for oil and natural gas liquids)
+# "Million tonnes/yr" :: million tonnes per year (used for coal and cement)
+# "Million Tonnes CO2" :: million tonnes of CO2 per year (used for cement)
+
+# tab_01
+df |> 
+  group_by(production_unit) |> 
+  summarise(n = n()) |> 
+  knitr::kable()
+
+# tab_02
+df |> 
+  group_by(commodity) |> 
+  summarise(n = n()) |> 
+  knitr::kable()
+
+# tab_03
+df |> 
+  group_by(parent_type, commodity) |> 
+  summarise(n = n()) |> 
+  knitr::kable()
+
 # Communicate ----
 
 # ...
+
+df_lm <- 
+  df |> 
+  filter(commodity == "Natural Gas")
+
+model <- lm(production_value ~ total_emissions_mt_co2e, data = df_lm)
+
+check_model(model)
