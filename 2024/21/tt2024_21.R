@@ -167,3 +167,6 @@ df_lm <-
 model <- lm(production_value ~ total_emissions_mt_co2e, data = df_lm)
 
 check_model(model)
+
+# try simple linear regression 
+# view using geom_smooth()
