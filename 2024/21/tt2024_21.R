@@ -1,15 +1,19 @@
 # --- TIDYTUESDAY::2024§21 --- #
 
-# https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/...
+# https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-05-21
 
 # Load ----
 
 # packages ----
 pacman::p_load(
+  car,
+  caret,
   data.table,
   easystats,
   ggthemes,
+  ggstatsplot,
   janitor,
+  lmtest,
   skimr,
   tidyverse
 )
@@ -21,7 +25,7 @@ df <-
   ) |>
   clean_names()
 # dictionary
-# https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-05-21/readme.md
+# https://t.ly/o3ica
 
 # Wrangle ----
 
@@ -40,16 +44,6 @@ df |>
 # summarise
 
 df |> 
-  group_by(parent_entity) |> 
-  summarise(n = n()) |> 
-  arrange(desc(n))
-
-df |> 
-  group_by(parent_type) |> 
-  summarise(n = n()) |> 
-  arrange(desc(n))
-
-df |> 
   group_by(commodity) |> 
   summarise(n = n()) |> 
   arrange(desc(n))
@@ -58,169 +52,114 @@ df |>
   group_by(production_unit) |> 
   summarise(n = n()) |> 
   arrange(desc(n))
+## cement, measured in million tonnes co2 looks interesting
 
 # Visualise ----
 
-# vis_01
-df |> 
-  group_by(commodity) |>
-  summarize(
-    min_year = min(year),
-    max_year = max(year)
-  ) |>
-  arrange(desc(commodity)) |> 
-  ggplot() +
-  geom_segment(aes(
-    x = min_year,
-    xend = max_year,
-    y = commodity
-  ), color = "#9d0006") +
-  geom_point(
-    aes(x = min_year, y = commodity),
-    color = '#9d0006',
-    alpha = 0.9,
-    size = 3.5
-  ) +
-  geom_text(
-    aes(x = min_year, y = commodity, label = min_year),
-    size = 4,
-    hjust = -0.45,
-    vjust = -1.25,
-    family = 'Consolas',
-    color = '#d3ebe9'
-  ) +
-  theme_wsj(color = "#081F2D") +
-  theme(
-    axis.line.x = element_line(colour = "#d3ebe9"),
-    axis.text = element_text(family = 'Consolas', colour = "#d3ebe9"),
-    axis.ticks = element_line(colour = "#d3ebe9"),
-    legend.text = element_text(family = 'Consolas', colour = "#d3ebe9"),
-    legend.title = element_text(family = 'Consolas', size = 28, colour = "#d3ebe9"),
-    panel.background = element_rect(fill = "#081F2D", colour = "#081F2D"),
-    panel.grid.major.y = element_line(colour = "#d3ebe9", linetype = 'dotted'),
-    plot.background = element_rect(fill = "#081F2D", colour = "#081F2D"),
-    plot.caption = element_text(family = 'Consolas', size = 10, colour = "#d3ebe9"),
-    plot.subtitle = element_text(family = 'Consolas', size = 13, colour = "#d3ebe9"),
-    plot.title = element_text(size = 28, colour = "#d3ebe9"),
-    plot.title.position = 'plot',
-  ) +
-  xlab("") +
-  ylab("") +
-  labs(title = "commodities",
-       subtitle = " ",
-       caption = "tidytuesday 2024§21〔https://〕"
-)
-
-# natural gas sounds green right?
-# and also young when put in perspective;
-# speaking if which
-
-# vis_02
-df |> 
-  ggplot(aes(x = production_value,
-             y = total_emissions_mt_co2e)) +
-  geom_point(alpha = 0.8)  +
-  geom_smooth(color = "#9d0006",
-              method = 'gam',
-              se = TRUE) +
-  facet_wrap(production_unit ~ .) +
-  labs(title = "emissions behaviour by production unit") +
-  theme_wsj()
-
-# now it looks even better
 # "Bcf/yr" :: billion cubic feet per year (used for natural gas)
 # "Million bbl/yr" :: million barrels per year (used for oil and natural gas liquids)
 # "Million tonnes/yr" :: million tonnes per year (used for coal and cement)
 # "Million Tonnes CO2" :: million tonnes of CO2 per year (used for cement)
 
-# vis_03
+# tabular ----
+df |> 
+  filter(production_unit == "Million Tonnes CO2") |>
+  group_by(parent_entity) |> 
+  summarise(n = n()) |> 
+  arrange(desc(n)) |> 
+  knitr::kable()
+
+df |> 
+  filter(production_unit == "Million Tonnes CO2") |>
+  group_by(parent_type) |> 
+  summarise(n = n()) |> 
+  arrange(desc(n)) |> 
+  knitr::kable()
+
+# graphical ----
 df |>
-  filter(production_unit == "Bcf/yr") |>
+  filter(production_unit == "Million Tonnes CO2") |>
   ggplot(aes(x = production_value,
              y = total_emissions_mt_co2e)) +
   geom_point(alpha = 0.8)  +
   geom_smooth(color = "#9d0006",
               method = 'gam',
               se = TRUE) +
+  facet_wrap(parent_type ~ .) +
   labs(
-    title = "emissions raise as production goes",
+    title = "MtCO2e emissions ~ production",
     x = "production value",
     y = "total emissions mt/co2e") +
-  theme_wsj()
-
-# tab_01
-df |> 
-  group_by(production_unit) |> 
-  summarise(n = n()) |> 
-  knitr::kable()
-
-# tab_02
-df |> 
-  group_by(commodity) |> 
-  summarise(n = n()) |> 
-  knitr::kable()
-
-# tab_03
-df |> 
-  group_by(parent_type, commodity) |> 
-  summarise(n = n()) |> 
-  knitr::kable()
+  ggstatsplot::theme_ggstatsplot()
+## it seems national entities from China aren't as inviting
+## as investor-owned companies; which are behaving somewhat funky
+## therefore more intriguing to analyse!
 
 # Analyse ----
 
-df_mod <- df |> 
-  filter(production_unit == "Bcf/yr")
-
-set.seed(8080)
-
-df_mod_sample <- df_mod[sample(100)]
-
 # simple linear regression ----
 
-# criteria = total_emissions_mt_co2e
-# predictor = production_value
-#
+# variables ----
+
+# criteria|dv|response = total_emissions_mt_co2e :: y
+# predictor|iv|explanatory = production_value :: x
+
+# model ----
+
 # which translates into the following,
 # something of the change in production_value
 # might explain a change in total_emissions_mt_co2e;
 # if true, a causal relationship is highly expected
 
-df_mod_sample |> 
-  ggplot(aes(x = production_value,
-             y = total_emissions_mt_co2e)) +
-  geom_point(alpha = 0.8)  +
-  geom_smooth(color = "#9d0006",
-              method = 'auto',
-              se = TRUE) +
-  theme_wsj()
+df_mod <- df |> 
+  filter(production_unit == "Million Tonnes CO2") |> 
+  filter(parent_type != "Nation State")
+
+df_mod_model <- lm(total_emissions_mt_co2e ~ production_value, data = df_mod)
+
+summary(df_mod_model)
+
+preds <- predict(df_mod_model, newdata = df_mod)
+
+residuals <- df_mod$total_emissions_mt_co2e-preds
+
+qqnorm(residuals)
+qqline(residuals)
+
+RMSE(preds, df$total_emissions_mt_co2e)
 
 ## check assumptions ----
 
 ### normality ----
 
-# analytical
+#### analytical ----
 
 # according to https://youtu.be/sDrAoR17pNM
 # ks.test() and shapiro.test() can be used;
 # if p-value >= 0.05,
 # there's no deviation of the data from the normal distribution
 # so we can assume data is normally distributed
-#
-# ks.test and shapiro.test become significant
+# however ks.test() and shapiro.test() become significant
 # very quickly with a large sample
 # ---
-# set.seed(8080)
-# 
-# df_mod_sample <- df_mod[sample(10)]
-# 
-# shapiro.test(df_mod_sample$total_emissions_mt_co2e)
-# ---
 
-# graphical
+ks.test(df_mod$production_value, df_mod$total_emissions_mt_co2e)
 
+shapiro.test(df_mod$total_emissions_mt_co2e)
+
+# https://t.ly/G5RHg
+# interpretation suggests data does not exhibit a normal distribution
+
+#### graphical ----
+
+# histograms
+hist(df_mod$production_value)
+hist(df_mod$total_emissions_mt_co2e)
+
+# qqplot
 qqplot(
-  x = df_mod_sample$production_value,
-  y = df_mod_sample$total_emissions_mt_co2e,
+  x = df_mod$production_value,
+  y = df_mod$total_emissions_mt_co2e,
   main = "normal q-q plot",
   xlab = "theoretical quantiles",
   ylab = "sample quantiles"
@@ -228,13 +167,27 @@ qqplot(
 
 ### homoscedasticity ----
 
+# https://en.wikipedia.org/wiki/Homoscedasticity_and_heteroscedasticity
+## tldr :: https://t.ly/Dv6_F
+
 # https://t.ly/mayoK
 
-model <- lm(total_emissions_mt_co2e ~ production_value, data = df_mod_sample)
+#### analytical ----
 
-summary(model)
+ncvTest(df_mod_model)
 
-plot(fitted(model), resid(model), xlab = "fitted values", ylab = "residuals")
+gqtest(df_mod_model, order.by = ~ production_value, data = df_mod)
+
+# https://t.ly/o2ubZ
+# interpretation suggests a high chance of heteroscedasticity
+
+#### graphical ----
+
+plot(fitted(df_mod_model), 
+     resid(df_mod_model), 
+     xlab = "fitted values", 
+     ylab = "residuals")
+# observation suggests a high chance of heteroscedasticity
 
 ### multicollinearity ----
 
@@ -249,3 +202,49 @@ plot(fitted(model), resid(model), xlab = "fitted values", ylab = "residuals")
 # multicollinearity because there are no other variables to be correlated with
 # each other. In such a case, you can proceed with your regression analysis
 # without worrying about multicollinearity.
+
+# plot ----
+
+ggscatterstats(
+  df_mod,
+  production_value,
+  total_emissions_mt_co2e,
+  type = 'nonparametric',
+  conf.level = 0.95,
+  smooth.line.args = list(
+    linewidth = 0.5,
+    color = "#9d0006",
+    method = 'lm',
+    formula = y ~ x
+  ),
+  xsidehistogram.args = list(
+    binwidth = 5,
+    fill = "#b57614",
+    color = "#282828",
+    na.rm = TRUE
+  ),
+  ysidehistogram.args = list(
+    binwidth = 5,
+    fill = "#8f3f71",
+    color = "#282828",
+    na.rm = TRUE
+  ),
+  xlab = "production value",
+  ylab = "total emissions mt co2e",
+  title = "cement's emissions according to production",
+  caption = "emissions mt/co2e = -0.037196 + 0.632733 * production_value",
+  ggtheme = ggstatsplot::theme_ggstatsplot(),
+  ggplot.component = NULL
+)
+
+# equation ----
+
+# get coefficients from the model summary
+df_mod_model_intercept <- summary(df_mod_model)$coefficients[1, 1]
+df_mod_model_slope <- summary(df_mod_model)$coefficients[2, 1]
+
+# Construct the linear equation
+df_mod_model_linear_equation <- paste("emissions mt/co2e =", round(df_mod_model_intercept, 6), "+", round(df_mod_model_slope, 6), "* production_value")
+
+# Print the linear equation
+print(df_mod_model_linear_equation)
