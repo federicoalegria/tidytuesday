@@ -61,8 +61,6 @@ df |>
 
 # Visualise ----
 
-# for quarto slides ----
-
 # vis_01
 df |> 
   group_by(commodity) |>
@@ -76,10 +74,10 @@ df |>
     x = min_year,
     xend = max_year,
     y = commodity
-  ), color = "#c33027") +
+  ), color = "#9d0006") +
   geom_point(
     aes(x = min_year, y = commodity),
-    color = '#c33027',
+    color = '#9d0006',
     alpha = 0.9,
     size = 3.5
   ) +
@@ -119,24 +117,36 @@ df |>
 
 # vis_02
 df |> 
-  filter(commodity == "Natural Gas") |> 
   ggplot(aes(x = production_value,
              y = total_emissions_mt_co2e)) +
-  geom_point() +
-  theme_wsj()
-
-# vis_03
-df |> 
-  ggplot(aes(x = production_value,
-             y = total_emissions_mt_co2e)) +
-  geom_point() +
+  geom_point(alpha = 0.8)  +
+  geom_smooth(color = "#9d0006",
+              method = 'gam',
+              se = TRUE) +
   facet_wrap(production_unit ~ .) +
+  labs(title = "emissions behaviour by production unit") +
   theme_wsj()
 
+# now it looks even better
 # "Bcf/yr" :: billion cubic feet per year (used for natural gas)
 # "Million bbl/yr" :: million barrels per year (used for oil and natural gas liquids)
 # "Million tonnes/yr" :: million tonnes per year (used for coal and cement)
 # "Million Tonnes CO2" :: million tonnes of CO2 per year (used for cement)
+
+# vis_03
+df |>
+  filter(production_unit == "Bcf/yr") |>
+  ggplot(aes(x = production_value,
+             y = total_emissions_mt_co2e)) +
+  geom_point(alpha = 0.8)  +
+  geom_smooth(color = "#9d0006",
+              method = 'gam',
+              se = TRUE) +
+  labs(
+    title = "emissions raise as production goes",
+    x = "production value",
+    y = "total emissions mt/co2e") +
+  theme_wsj()
 
 # tab_01
 df |> 
@@ -156,17 +166,86 @@ df |>
   summarise(n = n()) |> 
   knitr::kable()
 
-# Communicate ----
+# Analyse ----
 
-# ...
+df_mod <- df |> 
+  filter(production_unit == "Bcf/yr")
 
-df_lm <- 
-  df |> 
-  filter(commodity == "Natural Gas")
+set.seed(8080)
 
-model <- lm(production_value ~ total_emissions_mt_co2e, data = df_lm)
+df_mod_sample <- df_mod[sample(100)]
 
-check_model(model)
+# simple linear regression ----
 
-# try simple linear regression 
-# view using geom_smooth()
+# criteria = total_emissions_mt_co2e
+# predictor = production_value
+#
+# which translates into the following,
+# something of the change in production_value
+# might explain a change in total_emissions_mt_co2e;
+# if true, a causal relationship is highly expected
+
+df_mod_sample |> 
+  ggplot(aes(x = production_value,
+             y = total_emissions_mt_co2e)) +
+  geom_point(alpha = 0.8)  +
+  geom_smooth(color = "#9d0006",
+              method = 'auto',
+              se = TRUE) +
+  theme_wsj()
+
+## check assumptions ----
+
+### normality ----
+
+# analytical
+
+# according to https://youtu.be/sDrAoR17pNM
+# ks.test() and shapiro.test() can be used;
+# if p-value >= 0.05,
+# there's no deviation of the data from the normal distribution
+# so we can assume data is normally distributed
+#
+# ks.test and shapiro.test become significant
+# very quickly with a large sample
+# ---
+# set.seed(8080)
+# 
+# df_mod_sample <- df_mod[sample(10)]
+# 
+# shapiro.test(df_mod_sample$total_emissions_mt_co2e)
+# ---
+
+# graphical
+
+qqplot(
+  x = df_mod_sample$production_value,
+  y = df_mod_sample$total_emissions_mt_co2e,
+  main = "normal q-q plot",
+  xlab = "theoretical quantiles",
+  ylab = "sample quantiles"
+)
+
+### homoscedasticity ----
+
+# https://t.ly/mayoK
+
+model <- lm(total_emissions_mt_co2e ~ production_value, data = df_mod_sample)
+
+summary(model)
+
+plot(fitted(model), resid(model), xlab = "fitted values", ylab = "residuals")
+
+### multicollinearity ----
+
+# https://t.ly/r2m74
+
+# If you have only two metric variables, one as the criteria (dependent
+# variable) and the other as the predictor (independent variable), then you do
+# not need to check for multicollinearity. Multicollinearity typically arises
+# when there are multiple predictor variables that are highly correlated with
+# each other, which can lead to unstable regression coefficients and poor model
+# performance. With only two variables, there is no possibility of
+# multicollinearity because there are no other variables to be correlated with
+# each other. In such a case, you can proceed with your regression analysis
+# without worrying about multicollinearity.
