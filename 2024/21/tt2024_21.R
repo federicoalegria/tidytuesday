@@ -29,7 +29,7 @@ df <-
 
 # Wrangle ----
 
-# eda ----
+## eda ----
 
 # names
 df |> 
@@ -42,7 +42,6 @@ df |>
   skim()
 
 # summarise
-
 df |> 
   group_by(commodity) |> 
   summarise(n = n()) |> 
@@ -61,7 +60,7 @@ df |>
 # "Million tonnes/yr" :: million tonnes per year (used for coal and cement)
 # "Million Tonnes CO2" :: million tonnes of CO2 per year (used for cement)
 
-# tabular ----
+## tabular ----
 df |> 
   filter(production_unit == "Million Tonnes CO2") |>
   group_by(parent_entity) |> 
@@ -76,7 +75,7 @@ df |>
   arrange(desc(n)) |> 
   knitr::kable()
 
-# graphical ----
+## graphical ----
 df |>
   filter(production_unit == "Million Tonnes CO2") |>
   ggplot(aes(x = production_value,
@@ -87,24 +86,26 @@ df |>
               se = TRUE) +
   facet_wrap(parent_type ~ .) +
   labs(
-    title = "MtCO2e emissions ~ production",
-    x = "production value",
-    y = "total emissions mt/co2e") +
-  ggstatsplot::theme_ggstatsplot()
+    title = expression(bold("MtCO2e emissions ~ production")),
+    x = expression(bold("production value")),
+    y = expression(bold("total emissions mt/co2e"))) +
+  theme_minimal() + 
+  theme(text = element_text(family = 'Roboto Mono'),
+        strip.text = element_text(face = 'bold', family = 'Roboto Mono'))
 ## it seems national entities from China aren't as inviting
 ## as investor-owned companies; which are behaving somewhat funky
 ## therefore more intriguing to analyse!
 
 # Analyse ----
 
-# simple linear regression ----
+## simple linear regression ----
 
-# variables ----
+### variables ----
 
 # criteria|dv|response = total_emissions_mt_co2e :: y
 # predictor|iv|explanatory = production_value :: x
 
-# model ----
+### model ----
 
 # which translates into the following,
 # something of the change in production_value
@@ -128,11 +129,11 @@ qqline(residuals)
 
 RMSE(preds, df$total_emissions_mt_co2e)
 
-## check assumptions ----
+### check assumptions ----
 
-### normality ----
+#### normality ----
 
-#### analytical ----
+##### analytical ----
 
 # according to https://youtu.be/sDrAoR17pNM
 # ks.test() and shapiro.test() can be used;
@@ -150,11 +151,18 @@ shapiro.test(df_mod$total_emissions_mt_co2e)
 # https://t.ly/G5RHg
 # interpretation suggests data does not exhibit a normal distribution
 
-#### graphical ----
+##### graphical ----
 
-# histograms
-hist(df_mod$production_value)
-hist(df_mod$total_emissions_mt_co2e)
+# histogram
+hist(df_mod$production_value,
+     main = "production value's distribution",
+     xlab = "production value",
+     ylab = "freq")
+
+hist(df_mod$total_emissions_mt_co2e,
+     main = "total emissions' (mt/CO2E) distribution",
+     xlab = "total emissions mt/CO2E",
+     ylab = "freq")
 
 # qqplot
 qqplot(
@@ -165,14 +173,14 @@ qqplot(
   ylab = "sample quantiles"
 )
 
-### homoscedasticity ----
+#### homoscedasticity ----
 
 # https://en.wikipedia.org/wiki/Homoscedasticity_and_heteroscedasticity
 ## tldr :: https://t.ly/Dv6_F
 
 # https://t.ly/mayoK
 
-#### analytical ----
+##### analytical ----
 
 ncvTest(df_mod_model)
 
@@ -181,7 +189,7 @@ gqtest(df_mod_model, order.by = ~ production_value, data = df_mod)
 # https://t.ly/o2ubZ
 # interpretation suggests a high chance of heteroscedasticity
 
-#### graphical ----
+##### graphical ----
 
 plot(fitted(df_mod_model), 
      resid(df_mod_model), 
@@ -189,7 +197,7 @@ plot(fitted(df_mod_model),
      ylab = "residuals")
 # observation suggests a high chance of heteroscedasticity
 
-### multicollinearity ----
+#### multicollinearity ----
 
 # https://t.ly/r2m74
 
@@ -203,7 +211,22 @@ plot(fitted(df_mod_model),
 # each other. In such a case, you can proceed with your regression analysis
 # without worrying about multicollinearity.
 
-# plot ----
+### equation ----
+
+# get coefficients from the model summary
+df_mod_model_intercept <- summary(df_mod_model)$coefficients[1, 1]
+df_mod_model_slope <- summary(df_mod_model)$coefficients[2, 1]
+
+# build the linear equation
+df_mod_model_linear_equation <- paste("emissions mt/co2e =",
+                                      round(df_mod_model_intercept, 6),
+                                      "+",
+                                      round(df_mod_model_slope, 6),
+                                      "* production_value")
+
+df_mod_model_linear_equation
+
+### plot ----
 
 ggscatterstats(
   df_mod,
@@ -231,20 +254,14 @@ ggscatterstats(
   ),
   xlab = "production value",
   ylab = "total emissions mt co2e",
-  title = "cement's emissions according to production",
-  caption = "emissions mt/co2e = -0.037196 + 0.632733 * production_value",
+  title = "emissions according to cement's production",
+  caption = "linear equation :: emissions mt/co2e = -0.037196 + 0.632733 * production_value
+  data pulled from https://t.ly/o3ica",
   ggtheme = ggstatsplot::theme_ggstatsplot(),
   ggplot.component = NULL
+  ) +
+  theme(plot.title = element_text(size = 18),
+    plot.caption = element_text(family = 'Consolas', size = 11)
 )
 
-# equation ----
-
-# get coefficients from the model summary
-df_mod_model_intercept <- summary(df_mod_model)$coefficients[1, 1]
-df_mod_model_slope <- summary(df_mod_model)$coefficients[2, 1]
-
-# Construct the linear equation
-df_mod_model_linear_equation <- paste("emissions mt/co2e =", round(df_mod_model_intercept, 6), "+", round(df_mod_model_slope, 6), "* production_value")
-
-# Print the linear equation
-print(df_mod_model_linear_equation)
+# ...
