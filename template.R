@@ -53,13 +53,7 @@ df |>
 
 # Analyse ----
 
-# unassisted
-
-# assisted
-
-### https://chat.openai.com/share/
-### https://gemini.google.com/app/
-### https://www.perplexity.ai/share/
+# ...
 
 # Communicate ----
 
