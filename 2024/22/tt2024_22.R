@@ -7,6 +7,7 @@
 # packages ----
 pacman::p_load(
   data.table,
+  gt,
   janitor,
   skimr,
   tidyverse
@@ -14,6 +15,7 @@ pacman::p_load(
 
 # data ----
 
+## harvest ----
 harvest_2020 <-
   fread(
     'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-05-28/harvest_2020.csv'
@@ -28,6 +30,7 @@ harvest_2021 <-
 
 harvest <- bind_rows(harvest_2020, harvest_2021)
 
+## planting ----
 planting_2020 <-
   fread(
     'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-05-28/planting_2020.csv'
@@ -42,6 +45,7 @@ planting_2021 <-
 
 planting <- bind_rows(planting_2020, planting_2021)
 
+## spending ----
 spending_2020 <-
   fread(
     'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-05-28/spending_2020.csv'
@@ -56,35 +60,62 @@ spending_2021 <-
 
 spending <- bind_rows(spending_2020, planting_2021)
 
-rm(harvest_2020, harvest_2021, planting_2020, planting_2021, spending_2020, spending_2021)
-
 # dictionary
 # https://t.ly/MR5tc
+# rm(harvest_2020, harvest_2021, planting_2020, planting_2021, spending_2020, spending_2021)
 
 # Wrangle ----
 
 # eda ----
 
 # names
-df |> 
-  slice(0) |> 
+harvest |> 
+  slice() |> 
   glimpse()
 
 # glimpse & skim
-df |>
+harvest |>
   glimpse() |>
   skim()
 
-# Visualise ----
+## planting ----
+
+## selector
+planting |> 
+  filter(plot == "H") |> 
+  group_by(vegetable) |> 
+  summarise(sum(number_seeds_planted))
+
+## function
+sbp <- function(data) {
+  # unique values by plot
+  
+  plots <- unique(data$plot)
+  # loop through `unique_plots` and summarise by vegetable
+  
+  for (plot in plots) {
+    summary <- data |> 
+      filter(plot == !!plot) |> 
+      group_by(vegetable) |> 
+      summarise(seeds = sum(number_seeds_planted))
+  
+    # Print the result
+    cat("seeds planted in", plot, "\n")
+    print(summary)
+    cat("\n")
+  }
+}
+
+sbp(planting)
+
+# ... ----
+
+# Visualise
 
 # raw
 
 # rice
 
-# Analyse ----
+# Analyse
 
-# ...
-
-# Communicate ----
-
-# ...
+# Communicate
