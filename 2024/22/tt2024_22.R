@@ -108,14 +108,108 @@ sbp <- function(data) {
 
 sbp(planting)
 
-# ... ----
-
 # Visualise
 
-# raw
+# how packed are these lots?
+planting |> 
+  group_by(plot) |> 
+  summarise(total = sum(number_seeds_planted)) |> 
+  arrange(desc(total))
 
-# rice
+# spatial ----
 
-# Analyse
+# text labels
+for_labs <- 
+  gardenR::garden_coords |> 
+  group_by(plot) |> 
+  mutate(plot = str_to_lower(plot)) |> 
+  summarize(x = mean(x),
+            y = mean(y))
+
+# layout
+gardenR::garden_coords |>
+  group_by(plot) |>
+  mutate(plot = str_to_lower(plot)) |>
+  mutate(packed = case_when(
+    plot == "l" ~ TRUE,
+    plot == "p" ~ TRUE,
+    plot == "m" ~ TRUE,
+    plot == "g" ~ TRUE,
+    plot == "h" ~ TRUE,
+    TRUE ~ FALSE)
+    ) |>
+  ggplot(aes(x = x,
+             y = y,
+             group = plot)) +
+  geom_polygon(
+    aes(fill = packed),
+    color = "#282828",
+    linewidth = 0.5,
+    show.legend = FALSE
+  ) +
+  geom_text(
+    data = for_labs,
+    aes(x = x, y = y, label = plot),
+    color = "#ffffff",
+    family = 'Consolas',
+    fontface = 'bold',
+    size = 4.5
+  ) +
+  annotate(
+    'text',
+    x = 1,
+    y = 37,
+    label = "
+planted seeds
+per plot",
+    colour = "#ffffff",
+    family = 'Consolas',
+    fontface = 2,
+    size = 4.5
+  ) +
+  annotate(
+    'text',
+    x = 1,
+    y = 23.5,
+    label = "
+l       638
+p       569
+m       535
+g       410
+h       375
+j       317
+c       230
+e       191
+a       189
+b       165
+k       102
+o        54
+d        53
+i        50
+n        16
+f        ——
+      ",
+    colour = "#ffffff",
+    family = 'Consolas'
+  ) +
+  annotate(
+    "text",
+    x = 1,
+    y = 7.5,
+    label = "
+pot_b    66
+front    45
+wagon    40
+side     31
+pot_d    16
+pot_a     6
+pot_c     6
+      ",
+    colour = "#ffffff",
+    family = 'Consolas'
+  ) +
+  scale_fill_manual(values = c("FALSE" = "#98971a", "TRUE" = "#8f3f71")) +
+  theme_void() +
+  theme(panel.background = element_rect(fill = "#282828"))
 
 # Communicate
