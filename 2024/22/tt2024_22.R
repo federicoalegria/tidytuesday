@@ -4,10 +4,12 @@
 
 # Load ----
 
+devtools::install_github("llendway/gardenR")
+
 # packages ----
 pacman::p_load(
   data.table,
-  gt,
+  gardenR,
   janitor,
   skimr,
   tidyverse
@@ -120,29 +122,21 @@ planting |>
 
 # text labels
 for_labs <- 
-  gardenR::garden_coords |> 
+  garden_coords |> 
   group_by(plot) |> 
   mutate(plot = str_to_lower(plot)) |> 
   summarize(x = mean(x),
             y = mean(y))
 
 # layout
-gardenR::garden_coords |>
+garden_coords |>
   group_by(plot) |>
   mutate(plot = str_to_lower(plot)) |>
-  mutate(packed = case_when(
-    plot == "l" ~ TRUE,
-    plot == "p" ~ TRUE,
-    plot == "m" ~ TRUE,
-    plot == "g" ~ TRUE,
-    plot == "h" ~ TRUE,
-    TRUE ~ FALSE)
-    ) |>
   ggplot(aes(x = x,
              y = y,
              group = plot)) +
   geom_polygon(
-    aes(fill = packed),
+    aes(fill = plot),
     color = "#282828",
     linewidth = 0.5,
     show.legend = FALSE
@@ -150,26 +144,26 @@ gardenR::garden_coords |>
   geom_text(
     data = for_labs,
     aes(x = x, y = y, label = plot),
-    color = "#ffffff",
+    color = "#fbf1c7",
     family = 'Consolas',
     fontface = 'bold',
     size = 4.5
   ) +
   annotate(
     'text',
-    x = 1,
-    y = 37,
+    x = 0.5,
+    y = 39,
     label = "
 planted seeds
 per plot",
-    colour = "#ffffff",
-    family = 'Consolas',
-    fontface = 2,
-    size = 4.5
+colour = "#fbf1c7",
+family = 'Consolas',
+fontface = 2,
+size = 4.5
   ) +
   annotate(
     'text',
-    x = 1,
+    x = 0,
     y = 23.5,
     label = "
 l       638
@@ -189,12 +183,12 @@ i        50
 n        16
 f        ——
       ",
-    colour = "#ffffff",
-    family = 'Consolas'
+colour = "#fbf1c7",
+family = 'Consolas'
   ) +
   annotate(
     "text",
-    x = 1,
+    x = 0,
     y = 7.5,
     label = "
 pot_b    66
@@ -205,11 +199,24 @@ pot_d    16
 pot_a     6
 pot_c     6
       ",
-    colour = "#ffffff",
-    family = 'Consolas'
+colour = "#fbf1c7",
+family = 'Consolas'
   ) +
-  scale_fill_manual(values = c("FALSE" = "#98971a", "TRUE" = "#8f3f71")) +
+  scale_fill_manual(values = rep(c("#fb4934", "#83a598", "#b8bb26", "#d3869b", "#fabd2f", "#8ec07c"), length.out = length(unique(garden_coords$plot)))) +
+  labs(
+    title = "Lisa's garden",
+    caption = "data pulled from https://t.ly/MR5tc
+    by https://github.com/federicoalegria"
+  ) +
   theme_void() +
-  theme(panel.background = element_rect(fill = "#282828"))
+  theme(
+    panel.background = element_rect(fill = "#282828", color = NA),
+    plot.background = element_rect(fill = "#282828", color = NA),
+    panel.border = element_blank(),
+    plot.margin = unit(c(2, 2, 2, 2), "cm"),  # Adjust margins as needed
+    plot.title = element_text(family = "Consolas", color = "#fbf1c7", size = 16, face = "bold", hjust = 0.5, vjust = 3),
+    plot.caption = element_text(family = "Consolas", color = "#fbf1c7", vjust = -3)
+  )
 
 # Communicate
+
