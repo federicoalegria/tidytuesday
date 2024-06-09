@@ -131,7 +131,7 @@ for_labs <-
 # layout
 garden_coords |>
   group_by(plot) |>
-  mutate(plot = str_to_lower(plot)) |>
+  mutate(plot = str_to_lower(plot)) |>           # mutate all values to lower case
   ggplot(aes(x = x,
              y = y,
              group = plot)) +
@@ -143,7 +143,9 @@ garden_coords |>
   ) +
   geom_text(
     data = for_labs,
-    aes(x = x, y = y, label = plot),
+    aes(x = x, 
+        y = y, 
+        label = plot),
     color = "#fbf1c7",
     family = 'Consolas',
     fontface = 'bold',
@@ -161,7 +163,7 @@ family = 'Consolas',
 fontface = 2,
 size = 4.5
   ) +
-  annotate(
+  annotate(                                           # values pulled from `sbp` function
     'text',
     x = 0,
     y = 23.5,
@@ -202,7 +204,17 @@ pot_c     6
 colour = "#fbf1c7",
 family = 'Consolas'
   ) +
-  scale_fill_manual(values = rep(c("#fb4934", "#83a598", "#b8bb26", "#d3869b", "#fabd2f", "#8ec07c"), length.out = length(unique(garden_coords$plot)))) +
+  scale_fill_manual(
+    values = rep(c("#fb4934",
+                   "#83a598",
+                   "#b8bb26",
+                   "#d3869b",
+                   "#fabd2f",
+                   "#8ec07c"),
+                 length.out = length(unique(garden_coords$plot)
+                                     )
+                 )
+  ) +
   labs(
     title = "Lisa's garden",
     caption = "data pulled from https://t.ly/MR5tc
@@ -213,10 +225,19 @@ family = 'Consolas'
     panel.background = element_rect(fill = "#282828", color = NA),
     plot.background = element_rect(fill = "#282828", color = NA),
     panel.border = element_blank(),
-    plot.margin = unit(c(2, 2, 2, 2), "cm"),  # Adjust margins as needed
-    plot.title = element_text(family = "Consolas", color = "#fbf1c7", size = 16, face = "bold", hjust = 0.5, vjust = 3),
-    plot.caption = element_text(family = "Consolas", color = "#fbf1c7", vjust = -3)
-  )
+    plot.margin = unit(c(2, 2, 2, 2), "cm"),
+    plot.title = element_text(family = 'Consolas',
+                              color = "#fbf1c7",
+                              size = 16,
+                              face = 'bold',
+                              hjust = 0.5, 
+                              vjust = 3),
+    plot.caption = element_text(family = 'Consolas', 
+                                color = "#fbf1c7",
+                                vjust = -3)
+)
 
-# Communicate
+# Communicate ----
 
+# for #tidytuesday 2024§22, i explored seeds from Lisa's garden: 
+# https://github.com/federicoalegria/_tidytuesday/blob/main/2024/22/tt2024_22.R
