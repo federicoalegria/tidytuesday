@@ -63,6 +63,43 @@ df |>
 ## * splices the named vector so that each element is treated as an individual argument in the recode() function
 ## https://rdrr.io/github/tidyverse/rlang/f/man/rmd/topic-metaprogramming.Rmd
 
+## continent_milk_color
+df |>
+  mutate(country = str_extract(country, "^[^,]+")) |>
+  mutate(continent = recode(
+    country,!!!custom_mapping,
+    .default = countrycode(country, "country.name", "continent")
+  )) |>
+  mutate(milk = str_extract(milk, "^[^,]+")) |>
+  mutate(color = str_extract(color, "^[^,]+")) |>
+  filter(!milk %in% c("cow", "plant-based")) |>
+  mutate(non_vegan = as.numeric(!vegan)) |>
+  drop_na(continent, milk, color, non_vegan) |>
+  ggplot(aes(
+    axis1 = continent,
+    axis2 = milk,
+    axis3 = color,
+    y = non_vegan
+  )) +
+  geom_alluvium(aes(fill = milk), alpha = 0.9, width = 1 / 12) +
+  geom_stratum(width = 1 / 12,
+               fill = "#d5ccba",
+               color = "#20111b") +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
+  scale_x_discrete(limits = c("continent", "milk", "color"),
+                   expand = c(0.15, 0.05)) +
+  scale_fill_manual(
+    values = c(
+      "buffalo" = "#be100e",
+      "camel" = "#5e5252",
+      "goat" = "#97522c",
+      "sheep" = "#ffd7b1",
+      "water buffalo" = "#426a79"
+    )
+  ) +
+  theme_minimal() +
+  labs(title = "alluvial view of cheese", x = " ", y = " ")
+
 ## continent_milk_rind
 df |>
   mutate(country = str_extract(country, "^[^,]+")) |>
