@@ -9,6 +9,7 @@ pacman::p_load(
   countrycode,
   data.table,
   ggalluvial,
+  ggthemes,
   janitor,
   skimr,
   tidyverse
@@ -52,15 +53,16 @@ custom_mapping <- c(
   "Wales" = "Europe"
 )
 
-df |>
-  mutate(country = str_extract(country, "^[^,]+")) |>
-  mutate(continent = recode(
-    country,
-    !!!custom_mapping,                                               # *
-    .default = countrycode(country, "country.name", "continent")
-    )
-)
-## * splices the named vector so that each element is treated as an individual argument in the recode() function
+# df |>
+#   mutate(country = str_extract(country, "^[^,]+")) |>
+#   mutate(continent = recode(
+#     country,
+#     !!!custom_mapping,     # *
+#     .default = countrycode(country, "country.name", "continent")
+#     )
+# )
+## * splices the named vector so that each element is treated as an individual 
+## argument in the recode() function
 ## https://rdrr.io/github/tidyverse/rlang/f/man/rmd/topic-metaprogramming.Rmd
 
 ## continent_milk_rind
@@ -84,36 +86,37 @@ df |>
   )) +
   geom_alluvium(aes(fill = milk), alpha = 0.9, width = 1 / 12) +
   geom_stratum(alpha = .15,
-               width = 2.5 / 12,
-               fill = "#A89984",
+               width = 1.5 / 12,
+               fill = "#ebdbb2",
                color = "#20111b") +
   geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   scale_x_discrete(limits = c("continent", "milk", "rind")) +
   scale_fill_manual(
     values = c(
       "buffalo" = "#be100e",
-      "goat" = "#928374",
-      "sheep" = "#98971A",
+      "goat" = "#a89984",
+      "sheep" = "#d79921",
       "water buffalo" = "#426a79"
     )
   ) +
-  theme_minimal(base_family = 'Consolas') +
+  theme_wsj(base_family = 'Consolas', color = '#ebdbb2') +
   theme(
-    text = element_text(family = 'Consolas'),
+    axis.text.y = element_blank(),
     legend.text = element_text(family = 'Consolas'),
     legend.title = element_blank(),
-    plot.title = element_text(family = 'Consolas', face = 'bold', size = 23),
+    plot.caption = element_text(size = 9),
     plot.subtitle = element_text(size = 18),
-    plot.caption = element_text(size = 9)
+    plot.title = element_text(family = 'Consolas', face = 'bold', size = 23),
+    text = element_text(family = 'Consolas')
   ) +
   labs(title = "cheese", 
        subtitle = "continent, animal source and rind",
-       caption = "camel, cow and plant-based milk were excluded from this alluvial plot
+       caption = "camel, cow and plant-based milk were excluded from this plot
        data pulled from https://t.ly/XRWHS by https://github.com/federicoalegria",
        x = " ",
        y = " ")
 
 # Communicate ----
 
-# ...
-
+# for #tidytuesday 2024§23, i explored cheese in a stretchy way: 
+# https://github.com/federicoalegria/_tidytuesday/blob/main/2024/23/tt2024_23.R
