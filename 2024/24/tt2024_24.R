@@ -40,8 +40,8 @@ rm(df_pi, df_pit)
 # recode lgl as binary
 df_bin <- 
   df |> 
-  mutate(across(6:21, ~if_else(is.na(.x), FALSE, .x) %>% as.numeric())) |> 
-  mutate(rating = ifelse(rating >= 4.0, 1, 0))
+  mutate(across(6:21, ~if_else(is.na(.x), FALSE, .x) %>% as.numeric()))
+  # mutate(rating = ifelse(rating >= 3.0, 1, 0))
 
 # eda ----
 
@@ -55,11 +55,21 @@ df |>
   glimpse() |>
   skim()
 
+# quick-summaries
+qs <- function(df_bin, start, end) {
+  for (i in start:end) {
+    print(df_bin |> group_by(!!sym(names(df_bin)[i])) |> summarise(n = n()))
+  }
+}
+
+# look for high 1-count
+qs(df_bin, 6, 21)
+
 # Analyse ----
 
 # model
 
-model <- glm(doctoral ~ rating,
+model <- glm(residential ~ rating,
              data = df_bin,
              family = 'binomial')
 
@@ -69,13 +79,13 @@ summary(model)
 
 df_bin |> 
   ggplot(aes(x = rating,
-             y = doctoral)) +
+             y = residential)) +
   geom_jitter(height = .05,
               alpha = .5) + 
   geom_smooth(method = 'glm',
               method.args = list('binomial'),
               se = FALSE) + 
-  labs(y = "doctoral") + 
+  labs(y = " ") + 
   theme_minimal()
 
 # Communicate ----
