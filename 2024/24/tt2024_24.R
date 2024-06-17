@@ -27,30 +27,59 @@ df_pit <-
 # dictionary
 # https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-06-11/readme.md
 
+df <- 
+  full_join(df_pi, 
+            df_pit, 
+            by = c("campus_name", "campus_location")
+)
+
+rm(df_pi, df_pit)
+
 # Wrangle ----
+
+# recode lgl as binary
+df_bin <- 
+  df |> 
+  mutate(across(6:21, ~if_else(is.na(.x), FALSE, .x) %>% as.numeric())) |> 
+  mutate(rating = ifelse(rating >= 4.0, 1, 0))
 
 # eda ----
 
 # names
-df_pit |> 
+df |> 
   slice(0) |> 
   glimpse()
 
 # glimpse & skim
-df_pit |>
+df |>
   glimpse() |>
   skim()
 
-# Visualise ----
-
-# raw
-
-# rice
-
 # Analyse ----
 
-# ...
+# model
+
+model <- glm(doctoral ~ rating,
+             data = df_bin,
+             family = 'binomial')
+
+summary(model)
+
+# Visualise ----
+
+df_bin |> 
+  ggplot(aes(x = rating,
+             y = doctoral)) +
+  geom_jitter(height = .05,
+              alpha = .5) + 
+  geom_smooth(method = 'glm',
+              method.args = list('binomial'),
+              se = FALSE) + 
+  labs(y = "doctoral") + 
+  theme_minimal()
 
 # Communicate ----
 
 # ...
+
+# https://www.youtube.com/watch?v=E7J3M1oYVlc
