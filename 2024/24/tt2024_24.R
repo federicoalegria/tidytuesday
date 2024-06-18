@@ -7,7 +7,10 @@
 # packages ----
 pacman::p_load(
   data.table,
+  easystats,
   janitor,
+  lme4,        # https://cran.r-project.org/web/packages/lme4/index.html
+  sjPlot,      # https://cran.r-project.org/web/packages/sjPlot/index.html
   skimr,
   tidyverse
 )
@@ -40,18 +43,21 @@ rm(df_pi, df_pit)
 # recode lgl as binary
 df_bin <- 
   df |> 
-  mutate(across(6:21, ~if_else(is.na(.x), FALSE, .x) %>% as.numeric()))
+  mutate(rating = ifelse(rating >= 3.5, 1, 0)) |> 
+  mutate(across(6:21, ~if_else(is.na(.x), FALSE, .x) %>% as.numeric())) |> 
+  select(3,6:21)
+  
   # mutate(rating = ifelse(rating >= 3.0, 1, 0))
 
 # eda ----
 
 # names
-df |> 
+df_bin|> 
   slice(0) |> 
   glimpse()
 
 # glimpse & skim
-df |>
+df_bin|>
   glimpse() |>
   skim()
 
@@ -63,30 +69,28 @@ qs <- function(df_bin, start, end) {
 }
 
 # look for high 1-count
-qs(df_bin, 6, 21)
+qs(df_bin, 1, 17)
 
 # Analyse ----
 
 # model
 
-model <- glm(residential ~ rating,
-             data = df_bin,
-             family = 'binomial')
+model <- glm(rating ~ ., family = binomial, data = df_bin[, c(1, 2:17)])
 
 summary(model)
 
 # Visualise ----
 
-df_bin |> 
-  ggplot(aes(x = rating,
-             y = residential)) +
-  geom_jitter(height = .05,
-              alpha = .5) + 
-  geom_smooth(method = 'glm',
-              method.args = list('binomial'),
-              se = FALSE) + 
-  labs(y = " ") + 
-  theme_minimal()
+performance(model) |> 
+  gt::gt()
+
+tab_model(model)
+
+plot_model(model, type = 'pred', terms = 'doctoral')
+
+p <- plot_model(model, type = 'pred')
+
+plot_grid(p)
 
 # Communicate ----
 
