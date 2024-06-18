@@ -7,7 +7,8 @@
 # packages ----
 pacman::p_load(
   data.table,
-  easystats,
+  # easystats,
+  ggstatsplot,
   janitor,
   lme4,        # https://cran.r-project.org/web/packages/lme4/index.html
   sjPlot,      # https://cran.r-project.org/web/packages/sjPlot/index.html
@@ -43,11 +44,8 @@ rm(df_pi, df_pit)
 # recode lgl as binary
 df_bin <- 
   df |> 
-  mutate(rating = ifelse(rating >= 3.5, 1, 0)) |> 
-  mutate(across(6:21, ~if_else(is.na(.x), FALSE, .x) %>% as.numeric())) |> 
+  mutate(across(6:21, ~if_else(is.na(.x), FALSE, .x) %>% as.integer())) |> 
   select(3,6:21)
-  
-  # mutate(rating = ifelse(rating >= 3.0, 1, 0))
 
 # eda ----
 
@@ -67,30 +65,24 @@ qs <- function(df_bin, start, end) {
     print(df_bin |> group_by(!!sym(names(df_bin)[i])) |> summarise(n = n()))
   }
 }
-
 # look for high 1-count
-qs(df_bin, 1, 17)
+qs(df_bin, 2, 17)
 
 # Analyse ----
 
 # model
 
-model <- glm(rating ~ ., family = binomial, data = df_bin[, c(1, 2:17)])
-
+model <- glm(rating ~ ., data = df_bin[, c(1, 2:9)])
 summary(model)
+
+p <- plot_model(model, type = 'pred')
+plot_grid(p)
 
 # Visualise ----
 
-performance(model) |> 
-  gt::gt()
-
-tab_model(model)
-
-plot_model(model, type = 'pred', terms = 'doctoral')
-
-p <- plot_model(model, type = 'pred')
-
-plot_grid(p)
+df_bin |> 
+  select(1:9) |> 
+  ggcorrmat()
 
 # Communicate ----
 
