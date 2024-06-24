@@ -52,6 +52,8 @@ fh |>
   summarise(n = n()) |>
   arrange(desc(n))
 
+# https://www.tidytextmining.com/sentiment
+
 # Visualise ----
 
 # raw
