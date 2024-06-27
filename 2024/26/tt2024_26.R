@@ -207,6 +207,8 @@ df |>
   summarise(n = n()) |>
   arrange(desc(n))
 
+# el `index` vendría de mutar `vote_average` en * 100
+
 # Communicate ----
 
 # ...
