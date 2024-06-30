@@ -6,13 +6,14 @@
 
 # packages ----
 pacman::p_load(
-  data.table,
-  ggdark,               # https://cran.r-project.org/web/packages/ggdark/index.html
-  janitor,
-  skimr,
-  tidyverse,
-  tidytext,             # https://cloud.r-project.org/web/packages/tidytext/index.html
-  udpipe                # https://cran.r-project.org/web/packages/udpipe/index.html
+  data.table,           # https://cran.r-project.org/web/packages/data.table/
+  ggdark,               # https://cran.r-project.org/web/packages/ggdark/
+  janitor,              # https://cran.r-project.org/web/packages/janitor/
+  patchwork,            # https://cran.r-project.org/web/packages/patchwork/
+  skimr,                # https://cran.r-project.org/web/packages/skimr/
+  tidyverse,            # https://cran.r-project.org/web/packages/tidyverse/
+  tidytext,             # https://cloud.r-project.org/web/packages/tidytext/
+  udpipe                # https://cran.r-project.org/web/packages/udpipe/
 )
 
 # data ----
@@ -47,12 +48,13 @@ primer <-
 
 df_sub <- 
   df |>
-  filter(str_detect(overview, pattern = "trans"))
+  filter(str_detect(overview, pattern = "transgender"))
 
 corpus <- udpipe(df_sub$overview, object = 'english')
 
-# lesbian
-corpus |>
+# lesbian ----
+p1 <- 
+  corpus |>
   inner_join(primer, by = "lemma") |>
   count(lemma, value, sort = TRUE) |>
   ggplot(aes(
@@ -60,8 +62,7 @@ corpus |>
     y = value,
     fill = value
   )) +
-  geom_col(alpha = 0.85,
-           position = 'identity',
+  geom_col(position = 'identity',
            width = 0.5) +
   lims() +
   scale_fill_gradient2(
@@ -79,8 +80,9 @@ corpus |>
   ) +
   coord_cartesian(ylim = c(-5, 5))
 
-# gay
-corpus |>
+# gay ----
+p2 <- 
+  corpus |>
   inner_join(primer, by = "lemma") |>
   count(lemma, value, sort = TRUE) |>
   ggplot(aes(
@@ -88,8 +90,7 @@ corpus |>
     y = value,
     fill = value
   )) +
-  geom_col(alpha = 0.85,
-           position = 'identity',
+  geom_col(position = 'identity',
            width = 0.5) +
   lims() +
   scale_fill_gradient2(
@@ -107,8 +108,9 @@ corpus |>
   ) +
   coord_cartesian(ylim = c(-5, 5))
 
-# bisexual
-corpus |>
+# bisexual ----
+p3 <- 
+  corpus |>
   inner_join(primer, by = "lemma") |>
   count(lemma, value, sort = TRUE) |>
   ggplot(aes(
@@ -116,8 +118,7 @@ corpus |>
     y = value,
     fill = value
   )) +
-  geom_col(alpha = 0.85,
-           position = 'identity',
+  geom_col(position = 'identity',
            width = 0.5) +
   lims() +
   scale_fill_gradient2(
@@ -135,8 +136,9 @@ corpus |>
   ) +
   coord_cartesian(ylim = c(-5, 5))
 
-# transgender
-corpus |>
+# transgender ----
+p4 <- 
+  corpus |>
   inner_join(primer, by = "lemma") |>
   count(lemma, value, sort = TRUE) |>
   ggplot(aes(
@@ -144,8 +146,7 @@ corpus |>
     y = value,
     fill = value
   )) +
-  geom_col(alpha = 0.85,
-           position = 'identity',
+  geom_col(position = 'identity',
            width = 0.5) +
   lims() +
   scale_fill_gradient2(
@@ -163,6 +164,16 @@ corpus |>
   ) +
   coord_cartesian(ylim = c(-5, 5))
 
+# patchwork 
+p1 / p2 / p3 / p4
+
+## pixel peeping
+## https://jspaint.app
+## https://jspaint.app/#local:1596eae522bc2
+
 # Communicate ----
 
-# ...
+# for #tidytuesday 2024§26
+# i explored sentiment from lgbt movies' overviews
+
+# https://github.com/federicoalegria/_tidytuesday/tree/main/2024/26
