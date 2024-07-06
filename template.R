@@ -1,8 +1,9 @@
 # --- TIDYTUESDAY::YYYY§WW --- #
-
 # https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/...
 
 # Load ----
+
+.libPaths(c("~/.R/x86_64-pc-linux-gnu-library/4.4", .libPaths()))
 
 # packages ----
 pacman::p_load(
@@ -47,9 +48,8 @@ df |>
 
 # Visualise ----
 
-# raw
-
-# rice
+# raw ----
+# rice ----
 
 # Analyse ----
 
