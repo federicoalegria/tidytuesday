@@ -1,8 +1,9 @@
 # --- TIDYTUESDAY::2024§27 --- #
-
 # https://github.com/rfordatascience/tidytuesday/blob/master/data/2024/2024-07-02/readme.md
 
 # Load ----
+
+.libPaths(c("~/.R/x86_64-pc-linux-gnu-library/4.4", .libPaths()))
 
 # packages ----
 pacman::p_load(
@@ -17,22 +18,6 @@ tt_data <-
   fread(
     'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-02/tt_datasets.csv'
   ) |> clean_names()
-
-tt_summ <-
-  fread(
-    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-02/tt_summary.csv'
-  ) |> clean_names()
-
-tt_urls <-
-  fread(
-    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-02/tt_urls.csv'
-  ) |> clean_names()
-
-tt_vars <-
-  fread(
-    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-02/tt_variables.csv'
-  ) |> clean_names()
-
 # dictionary
 # https://t.ly/nm1Jr
 
@@ -52,15 +37,8 @@ df |>
 
 # head-count
 head(tt_data)
-head(tt_summ)
-head(tt_urls)
-head(tt_urls)
 
 # making-sense
-tt_urls |> 
-  group_by(type) |> 
-  summarise(n = n())
-
 tt_data |> 
   arrange(desc(variables))
 
@@ -69,7 +47,7 @@ tt_data |>
 
 # Visualise ----
 
-# raw
+# raw ----
 
 tt_data |>
   select(dataset_name, observations) |>
@@ -93,11 +71,7 @@ tt_data |>
   coord_flip() +
   ggthemes::theme_wsj()
 
-# rice
-
-# Analyse ----
-
-# ...
+# rice ----
 
 # Communicate ----
 
