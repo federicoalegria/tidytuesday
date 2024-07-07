@@ -36,28 +36,9 @@ tt_data |>
   glimpse() |>
   skim()
 
-# head-count
-head(tt_data)
-
-# making-sense
-tt_data |> 
-  arrange(desc(variables))
-
-tt_data |> 
-  arrange(desc(observations))
-
 # Visualise ----
 
-# raw ----
-tt_data |>
-  arrange(desc(variables))
-
-tt_data |>
-  arrange(desc(observations))
-
-# Visualise ----
-
-# raw ----
+# bar_plot ----
 tt_data |>
   select(dataset_name, observations) |>
   mutate(observations = as.integer(observations)) |>
@@ -69,7 +50,15 @@ tt_data |>
                        .desc = TRUE)) |>
   ggplot(aes(x = dataset_name,
              y = observations)) +
-  geom_bar(stat = 'identity', fill = "#ebdbb2") +
+  geom_text(aes(label = format(observations, big.mark = ",")),
+            hjust = -0.2, 
+            family = 'Roboto Mono', 
+            color = '#ebdbb2',
+            size = 3) +
+  geom_bar(
+    fill = '#ebdbb2', 
+    stat = 'identity',
+    width = .3) +
   scale_y_continuous(labels = scales::comma) +
   labs(
     title = "largest observations",
@@ -79,6 +68,7 @@ tt_data |>
     x = "",
     y = ""
   ) +
+  coord_flip() +
   theme_wsj() +
   theme(
     axis.line.x = element_line(color = '#ebdbb2'),
@@ -86,18 +76,13 @@ tt_data |>
     axis.text = element_text(color = '#ebdbb2'),
     axis.title = element_text(color = '#ebdbb2'),
     panel.background = element_rect(fill = '#364355', color = '#364355'),
-    panel.grid.major = element_line(color = '#ebdbb2'),
+    panel.grid.major = element_blank(),
     panel.grid.minor = element_line(color = '#ebdbb2'),
     plot.background = element_rect(fill = '#364355', color = '#364355'),
     plot.caption = element_text(color = '#ebdbb2', family = 'Roboto Mono', size = 11),
     plot.subtitle = element_text(color = '#ebdbb2', family = 'Roboto Mono', size = 15),
     plot.title = element_text(color = '#ebdbb2', family = 'Roboto Mono', size = 18),
     text = element_text(family = 'Roboto Mono', color = '#ebdbb2')
-  ) +
-  coord_flip()
-
-# rice ----
-
-# Communicate ----
+)
 
 # ...
