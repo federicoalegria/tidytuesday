@@ -8,6 +8,7 @@
 # packages ----
 pacman::p_load(
   data.table,           # https://cran.r-project.org/web/packages/data.table/
+  ggthemes,             # https://cran.r-project.org/web/packages/ggthemes/
   janitor,              # https://cran.r-project.org/web/packages/janitor/
   skimr,                # https://cran.r-project.org/web/packages/skimr/
   tidyverse             # https://cran.r-project.org/web/packages/tidyverse/
@@ -26,12 +27,12 @@ tt_data <-
 # eda ----
 
 # names
-df |> 
+tt_data |> 
   slice(0) |> 
   glimpse()
 
 # glimpse & skim
-df |>
+tt_data |>
   glimpse() |>
   skim()
 
@@ -48,7 +49,15 @@ tt_data |>
 # Visualise ----
 
 # raw ----
+tt_data |>
+  arrange(desc(variables))
 
+tt_data |>
+  arrange(desc(observations))
+
+# Visualise ----
+
+# raw ----
 tt_data |>
   select(dataset_name, observations) |>
   mutate(observations = as.integer(observations)) |>
@@ -60,16 +69,32 @@ tt_data |>
                        .desc = TRUE)) |>
   ggplot(aes(x = dataset_name,
              y = observations)) +
-  geom_bar(stat = 'identity') +
+  geom_bar(stat = 'identity', fill = "#ebdbb2") +
   scale_y_continuous(labels = scales::comma) +
   labs(
-    title = "",
-    subtitle = "",
+    title = "largest observations",
+    subtitle = "shared throughout {tidytuesday} challenges",
+    caption = "
+    data pulled from https://t.ly/nm1Jr by https://github.com/federicoalegria",
     x = "",
     y = ""
   ) +
-  coord_flip() +
-  ggthemes::theme_wsj()
+  theme_wsj() +
+  theme(
+    axis.line.x = element_line(color = '#ebdbb2'),
+    axis.ticks.x = element_line(color = '#ebdbb2'),
+    axis.text = element_text(color = '#ebdbb2'),
+    axis.title = element_text(color = '#ebdbb2'),
+    panel.background = element_rect(fill = '#364355', color = '#364355'),
+    panel.grid.major = element_line(color = '#ebdbb2'),
+    panel.grid.minor = element_line(color = '#ebdbb2'),
+    plot.background = element_rect(fill = '#364355', color = '#364355'),
+    plot.caption = element_text(color = '#ebdbb2', family = 'Roboto Mono', size = 11),
+    plot.subtitle = element_text(color = '#ebdbb2', family = 'Roboto Mono', size = 15),
+    plot.title = element_text(color = '#ebdbb2', family = 'Roboto Mono', size = 18),
+    text = element_text(family = 'Roboto Mono', color = '#ebdbb2')
+  ) +
+  coord_flip()
 
 # rice ----
 
