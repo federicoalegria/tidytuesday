@@ -1,0 +1,53 @@
+# --- TIDYTUESDAY::2024§28 --- #
+# https://github.com/rfordatascience/tidytuesday/blob/master/data/2024/2024-07-09/readme.md
+
+# Load ----
+
+.libPaths(c("~/.R/x86_64-pc-linux-gnu-library/4.4", .libPaths()))
+
+# packages ----
+pacman::p_load(
+  data.table,
+  janitor,
+  skimr,
+  tidyverse
+)
+
+# data ----
+df <-
+  fread(
+    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-09/drob_funs.csv'
+  ) |>
+  clean_names()
+# dictionary
+# https://t.ly/U-WWB
+
+# Wrangle ----
+
+# eda ----
+
+# names
+df |> 
+  slice(0) |> 
+  glimpse()
+
+# glimpse & skim
+df |>
+  glimpse() |>
+  skim()
+
+# Visualise ----
+
+## inspo
+## https://github.com/poncest/tidytuesday/blob/main/2024/Week_28/2024_28.R
+
+# raw ----
+# rice ----
+
+# Analyse ----
+
+# ...
+
+# Communicate ----
+
+# ...
