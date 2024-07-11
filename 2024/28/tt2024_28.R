@@ -36,6 +36,17 @@ df |>
   glimpse() |>
   skim()
 
+df |> 
+  group_by(pkgs) |> 
+  summarise(n = n()) |> 
+  arrange(desc(n))
+
+df |> 
+  select(pkgs, funs) |> 
+  group_by(pkgs, funs) |> 
+  summarise(n = n()) |> 
+  arrange(pkgs, desc(n))
+
 # Visualise ----
 
 ## inspiration
