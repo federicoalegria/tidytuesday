@@ -38,8 +38,8 @@ df |>
 
 # Visualise ----
 
-## inspo
-## https://github.com/poncest/tidytuesday/blob/main/2024/Week_28/2024_28.R
+## inspiration
+## https://r-graph-gallery.com/334-basic-dendrogram-with-ggraph.html
 
 # raw ----
 # rice ----
