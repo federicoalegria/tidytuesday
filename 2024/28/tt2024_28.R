@@ -37,15 +37,18 @@ df |>
   skim()
 
 df |> 
+  filter(!pkgs %in% c("(unknown)", "matrix", "WDI")) |> 
   group_by(pkgs) |> 
   summarise(n = n()) |> 
   arrange(desc(n))
 
 df |> 
+  filter(!pkgs %in% c("(unknown)", "matrix", "WDI")) |> 
   select(pkgs, funs) |> 
   group_by(pkgs, funs) |> 
   summarise(n = n()) |> 
-  arrange(pkgs, desc(n))
+  arrange(pkgs, desc(n)) |> 
+  print(n = Inf)
 
 # Visualise ----
 
