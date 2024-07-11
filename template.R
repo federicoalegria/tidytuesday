@@ -24,8 +24,6 @@ df <-
 
 # Wrangle ----
 
-# eda ----
-
 # names
 df |> 
   slice(0) |> 
@@ -36,7 +34,10 @@ df |>
   glimpse() |>
   skim()
 
-# tokenizer
+# eda ----
+
+# tokenize ----
+
 # df |>
 #   unnest_tokens(output = word, 
 #                 input = variable) |>
@@ -52,8 +53,6 @@ df |>
 # rice ----
 
 # Analyse ----
-
-# ...
 
 # Communicate ----
 
