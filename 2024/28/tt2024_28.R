@@ -53,7 +53,15 @@ df |>
 
 # Visualise ----
 
-palette <- c('#c33027', '#26a98b', '#edb54b', '#98d1ce', '#d26939')
+# gruvbox dark :: https://gogh-co.github.io/Gogh/
+palette <- c(
+  '#458588',
+  '#689d6a',
+  '#98971a',
+  '#b16286',
+  '#cc241d',
+  '#d79921'
+)
 
 # graph_from_data_frame
 graph_df <- df |> 
@@ -86,13 +94,17 @@ node_colours <- rep(palette, length.out = length(nodes))
 # add a node attribute for colour
 V(graph_df)$colour <- node_colours
 
+# set seed for reproducibility
+set.seed(0711)
+
 # Plot the graph with the specified colours
 ggraph(graph_df, layout = 'circlepack') + 
   geom_node_circle(aes(fill = colour)) +
   theme_void() +
-  theme(plot.background = element_rect(fill = '#d3ebe9')) +
+  theme(plot.background = element_rect(fill = '#282828')) +
   scale_fill_identity()
 
 # Communicate ----
 
-# ...
+## for #tidytuesday 2024§28 i larked a bit more with #PositronIDE while circular packing for the first time
+## https://github.com/federicoalegria/_tidytuesday/tree/main/2024/28
