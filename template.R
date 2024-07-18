@@ -39,10 +39,8 @@ df |>
 # tokenize ----
 
 # df |>
-#   unnest_tokens(output = word, 
-#                 input = variable) |>
-#   anti_join(stop_words, 
-#             by = "word") |>
+#   unnest_tokens(output = word, input = variable) |>
+#   anti_join(stop_words, by = "word") |>
 #   group_by(word) |>
 #   summarise(n = n()) |>
 #   arrange(desc(n))
