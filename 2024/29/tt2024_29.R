@@ -54,6 +54,17 @@ df01 |>
 
 boxplot(df01$goals_for ~ df01$tier)
 
+df01 |> 
+  select(date, attendance) |> 
+  group_by(date) |> 
+  summarise(total_attendance = sum(attendance)) |> 
+  ggplot(aes(x = date, y = total_attendance)) +
+  geom_col(fill = '#9d0006',  width = 10.5) + 
+  labs(title = "total attendance over time",
+       x = "date",
+       y = "total attendance") +
+  theme_minimal()
+
 # rice ----
 
 # Analyse ----
