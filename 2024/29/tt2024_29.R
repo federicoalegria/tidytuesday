@@ -14,21 +14,9 @@ pacman::p_load(
 )
 
 # data ----
-df01 <-
+df <-
   fread(
     'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-16/ewf_appearances.csv'
-  ) |>
-  clean_names()
-
-df02 <-
-  fread(
-    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-16/ewf_matches.csv'
-  ) |>
-  clean_names()
-
-df03 <-
-  fread(
-    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-16/ewf_standings.csv'
   ) |>
   clean_names()
 # dictionary
@@ -37,12 +25,12 @@ df03 <-
 # Wrangle ----
 
 # names
-df01 |> 
+df |> 
   slice(0) |> 
   glimpse()
 
 # glimpse & skim
-df01 |>
+df |>
   glimpse() |>
   skim()
 
@@ -50,16 +38,24 @@ df01 |>
 
 # Visualise ----
 
-df01 |> 
-  filter(tier == 1) |> 
-  group_by(date) |>
-  summarise(total_attendance = sum(attendance, na.rm = TRUE), .groups = 'drop') |> 
+df |>
+  mutate(result_binary = case_when(
+    result == "Draw" ~ "draw",
+    TRUE ~ "not a draw"
+  )) |>
+  filter(tier == 1) |>
+  group_by(date, result, result_binary) |>
+  summarise(
+    total_attendance = sum(attendance, na.rm = TRUE), 
+    .groups = 'drop') |>
   ggplot(aes(x = date, y = total_attendance)) +
-  geom_col(fill = '#9d0006', width = 10.5) + 
-  labs(title = "total attendance over time",
-       x = "date",
-       y = "total attendance") +
-  ggthemes::theme_wsj()
+  geom_col(fill = '#9d0006', width = 10.5) +
+  labs(
+    title = "total attendance over time",
+    x = "date",
+    y = "total attendance") +
+  ggthemes::theme_wsj() +
+  facet_wrap(~ result_binary, nrow = 2)
 
 # Communicate ----
 
