@@ -69,7 +69,7 @@ df |>
 # Communicate ----
 
 # for #tidytuesday 2024§29 
-# i explored attendence for EWF's historic attendance 
+# i explored attendance for EWF's historic attendance 
 # by splitting data by draw outcome
 
 # https://github.com/federicoalegria/_tidytuesday/tree/main/2024/29
