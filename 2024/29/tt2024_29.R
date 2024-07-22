@@ -51,12 +51,25 @@ df |>
   ggplot(aes(x = date, y = total_attendance)) +
   geom_col(fill = '#9d0006', width = 10.5) +
   labs(
-    title = "total attendance over time",
+    title = "English Women's Football (EWF)",
+    subtitle = "historic attendance split by draw outcome",
+    caption = "
+    data pulled from https://t.ly/_MRy7 by https://github.com/federicoalegria",
     x = "date",
     y = "total attendance") +
   ggthemes::theme_wsj() +
+  theme(
+    plot.caption = element_text(family = 'Roboto Mono', size = 11),
+    plot.subtitle = element_text(family = 'Roboto Mono', size = 15),
+    plot.title = element_text(family = 'Roboto Mono', size = 18),
+    text = element_text(family = 'Roboto Mono')
+  ) +
   facet_wrap(~ result_binary, nrow = 2)
 
 # Communicate ----
 
-# ...
+# for #tidytuesday 2024§29 
+# i explored attendence for EWF's historic attendance 
+# by splitting data by draw outcome
+
+# https://github.com/federicoalegria/_tidytuesday/tree/main/2024/29
