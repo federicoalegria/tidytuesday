@@ -1,40 +1,19 @@
 # --- TIDYTUESDAY::2024§30 --- #
 # https://github.com/rfordatascience/tidytuesday/blob/master/data/2024/2024-07-23/readme.md
 
-# Load ----
-
+# library path
 .libPaths(c("~/.R/x86_64-pc-linux-gnu-library/4.4", .libPaths()))
 
-# packages ----
+# packages
 pacman::p_load(
   data.table,           # https://cran.r-project.org/web/packages/data.table/
   janitor,              # https://cran.r-project.org/web/packages/janitor/
   skimr,                # https://cran.r-project.org/web/packages/skimr/
-  styler,                # https://cran.r-project.org/web/packages/styler/
+  styler,               # https://cran.r-project.org/web/packages/styler/
   tidyverse             # https://cran.r-project.org/web/packages/tidyverse/
 )
 
-# data ----
-# auditions
-df01 <-
-  fread(
-    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-23/auditions.csv'
-  ) |>
-  clean_names()
-
-# eliminations
-df02 <-
-  fread(
-    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-23/eliminations.csv'
-  ) |>
-  clean_names()
-
-# finalists
-df03 <-
-  fread(
-    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-23/finalists.csv'
-  ) |>
-  clean_names()
+# Import ----
 
 # ratings
 df04 <-
@@ -42,87 +21,50 @@ df04 <-
     'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-23/ratings.csv'
   ) |>
   clean_names()
-
-# seasons
-df05 <-
-  fread(
-    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-23/seasons.csv'
-  ) |>
-  clean_names()
-
-# songs
-df06 <-
-  fread(
-    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-23/songs.csv'
-  ) |>
-  clean_names()
 # dictionary
-# https://t.ly/ObBpl
+# https://raw.
 
-# Wrangle ----
+# Understand ----
 
 # names
-df01 |>
-  slice(0) |> 
-  glimpse()
-
-df02 |>
-  slice(0) |> 
-  glimpse()
-
-df03 |>
-  slice(0) |> 
-  glimpse()
-
-df04 |>
-  slice(0) |> 
-  glimpse()
-
-df05 |>
-  slice(0) |> 
-  glimpse()
-
-df06 |>
+df04 |> 
   slice(0) |> 
   glimpse()
 
 # glimpse & skim
-df01 |>
-  glimpse() |>
-  skim()
-
-df02 |>
-  glimpse() |>
-  skim()
-
-df03 |>
-  glimpse() |>
-  skim()
-
 df04 |>
   glimpse() |>
   skim()
 
-df05 |>
-  glimpse() |>
-  skim()
+# missing values
+sum(is.na(df04$x18_49_rating_share))
+sum(is.na(df04$viewers_in_millions))
 
-df06 |>
-  glimpse() |>
-  skim()
+# tokenize
+# df |>
+#   unnest_tokens(output = word, input = variable) |>
+#   anti_join(stop_words, by = "word") |>
+#   group_by(word) |>
+#   summarise(n = n()) |>
+#   arrange(desc(n))
 
-# eda ----
+# transform ---
 
-# Visualise ----
+# visualise ----
 
-# raw ----
+# raw
 
 plot(df04$viewers_in_millions, df04$x18_49_rating_share)
 
-# rice ----
+# rice
 
-# Analyse ----
+# model ----
+
+# https://www.perplexity.ai/search/in-r-i-want-to-conduct-a-simpl-L3PN2ss3T8mQDq3lT3J7SA
+
+model <- lm(x18_49_rating_share ~ viewers_in_millions, data = df04)
+
+plot(model)
 
 # Communicate ----
-
 # ...
