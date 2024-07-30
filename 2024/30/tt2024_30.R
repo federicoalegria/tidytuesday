@@ -10,6 +10,7 @@ pacman::p_load(
   data.table,           # https://cran.r-project.org/web/packages/data.table/
   janitor,              # https://cran.r-project.org/web/packages/janitor/
   skimr,                # https://cran.r-project.org/web/packages/skimr/
+  styler,                # https://cran.r-project.org/web/packages/styler/
   tidyverse             # https://cran.r-project.org/web/packages/tidyverse/
 )
 
@@ -115,6 +116,9 @@ df06 |>
 # Visualise ----
 
 # raw ----
+
+plot(df04$viewers_in_millions, df04$x18_49_rating_share)
+
 # rice ----
 
 # Analyse ----
