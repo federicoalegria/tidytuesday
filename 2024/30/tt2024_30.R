@@ -41,15 +41,9 @@ df |>
 sum(is.na(df$x18_49_rating_share))
 sum(is.na(df$viewers_in_millions))
 
-# tokenize
-# df |>
-#   unnest_tokens(output = word, input = variable) |>
-#   anti_join(stop_words, by = "word") |>
-#   group_by(word) |>
-#   summarise(n = n()) |>
-#   arrange(desc(n))
+# transform ----
 
-# transform ---
+df$x18_49_rating_share <- as.double(df$x18_49_rating_share)
 
 # visualise ----
 
@@ -60,18 +54,86 @@ plot(df$viewers_in_millions, df$x18_49_rating_share)
 # rice
 
 df |>
-  mutate(x18_49_rating_share = as.double(x18_49_rating_share)) |>
   filter(!is.na(x18_49_rating_share)) |>
   filter(x18_49_rating_share <= 10) |> 
   ggplot(aes(x = viewers_in_millions, y = x18_49_rating_share)) +
   geom_point(alpha = 0.75) +
   geom_smooth(colour = '#9d0006', fill = '#9d0006', alpha = 0.35) +
   theme(axis.text.y = element_text(angle = 0, hjust = 1)) +
-  theme_wsj()
+  theme_wsj() +
+  ggtitle("rating ~ views")
 
 # model ----
 
+# checking assumptions
+
+## visual inspection
+
+### histogram
+
+df |>
+  ggplot(aes(x = viewers_in_millions)) +
+  geom_histogram(
+    aes(y = ..density..),
+    binwidth = 1,
+    fill = '#3c3836'
+  ) +
+  geom_density(color = '#d79921', size = 1) +
+  theme_minimal() +
+  labs(x = "viewers in millions")
+
+df |>
+  ggplot(aes(x = x18_49_rating_share)) +
+  geom_histogram(
+    aes(y = ..density..),
+    binwidth = 1,
+    fill = '#3c3836'
+  ) +
+  geom_density(color = '#d79921', size = 1) +
+  theme_minimal() +
+  labs(x = "rating share")
+
+### q-q plot
+
+df |> 
+  ggplot(aes(sample = viewers_in_millions)) +
+  stat_qq() +
+  stat_qq_line() +
+  ggtitle("q-q plot of viewers in millions")
+
+df |>
+  ggplot(aes(sample = x18_49_rating_share)) +
+  stat_qq() +
+  stat_qq_line() +
+  ggtitle("q-q plot of rating share")
+
+## statistical tests
+
+### Shapiro-Wilk
+shapiro.test(df$viewers_in_millions)
+
+shapiro.test(df$x18_49_rating_share)
+
+# ### Kolmogorov-Smirnov
+# ks.test(
+#   df$viewers_in_millions,
+#   'pnorm',
+#   mean(df$viewers_in_millions, na.rm = TRUE),
+#   sd(df$viewers_in_millions, na.rm = TRUE)
+# )
+
+# ks.test(
+#   df$x18_49_rating_share,
+#   'pnorm',
+#   mean(df$x18_49_rating_share, na.rm = TRUE),
+#   sd(df$x18_49_rating_share, na.rm = TRUE)
+# )
+
+# ...
+
 # https://chatgpt.com/c/ebdee2ae-53d7-4721-9da8-578473413caf
+# alright, but it happens that my data shows some linearity, 
+# so i would like to perform a non-parametric equivalent 
+# of the simple linear regression
 
 # Communicate ----
-# ...
