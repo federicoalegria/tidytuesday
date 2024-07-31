@@ -7,6 +7,7 @@
 # packages
 pacman::p_load(
   data.table,           # https://cran.r-project.org/web/packages/data.table/
+  ggthemes,             # https://cran.r-project.org/web/packages/ggthemes/
   janitor,              # https://cran.r-project.org/web/packages/janitor/
   skimr,                # https://cran.r-project.org/web/packages/skimr/
   styler,               # https://cran.r-project.org/web/packages/styler/
@@ -16,7 +17,7 @@ pacman::p_load(
 # Import ----
 
 # ratings
-df04 <-
+df <-
   fread(
     'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-23/ratings.csv'
   ) |>
@@ -27,18 +28,18 @@ df04 <-
 # Understand ----
 
 # names
-df04 |> 
+df |> 
   slice(0) |> 
   glimpse()
 
 # glimpse & skim
-df04 |>
+df |>
   glimpse() |>
   skim()
 
 # missing values
-sum(is.na(df04$x18_49_rating_share))
-sum(is.na(df04$viewers_in_millions))
+sum(is.na(df$x18_49_rating_share))
+sum(is.na(df$viewers_in_millions))
 
 # tokenize
 # df |>
@@ -54,17 +55,23 @@ sum(is.na(df04$viewers_in_millions))
 
 # raw
 
-plot(df04$viewers_in_millions, df04$x18_49_rating_share)
+plot(df$viewers_in_millions, df$x18_49_rating_share)
 
 # rice
 
+df |>
+  mutate(x18_49_rating_share = as.double(x18_49_rating_share)) |>
+  filter(!is.na(x18_49_rating_share)) |>
+  filter(x18_49_rating_share <= 10) |> 
+  ggplot(aes(x = viewers_in_millions, y = x18_49_rating_share)) +
+  geom_point(alpha = 0.75) +
+  geom_smooth(colour = '#9d0006', fill = '#9d0006', alpha = 0.35) +
+  theme(axis.text.y = element_text(angle = 0, hjust = 1)) +
+  theme_wsj()
+
 # model ----
 
-# https://www.perplexity.ai/search/in-r-i-want-to-conduct-a-simpl-L3PN2ss3T8mQDq3lT3J7SA
-
-model <- lm(x18_49_rating_share ~ viewers_in_millions, data = df04)
-
-plot(model)
+# https://chatgpt.com/c/ebdee2ae-53d7-4721-9da8-578473413caf
 
 # Communicate ----
 # ...
