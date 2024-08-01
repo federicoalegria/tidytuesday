@@ -66,6 +66,8 @@ df |>
 # model ----
 
 # checking assumptions
+## https://www.youtube.com/watch?v=sDrAoR17pNM
+## https://chatgpt.com/c/ebdee2ae-53d7-4721-9da8-578473413caf
 
 ## visual inspection
 
@@ -131,7 +133,7 @@ shapiro.test(df$x18_49_rating_share)
 
 # ...
 
-# https://chatgpt.com/c/ebdee2ae-53d7-4721-9da8-578473413caf
+# https://chatgpt.com/c/~
 # alright, but it happens that my data shows some linearity, 
 # so i would like to perform a non-parametric equivalent 
 # of the simple linear regression
