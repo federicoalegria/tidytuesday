@@ -47,24 +47,6 @@ sum(is.na(df$viewers_in_millions))
 
 df$x18_49_rating_share <- as.double(df$x18_49_rating_share)
 
-# visualise ----
-
-# raw
-
-plot(df$viewers_in_millions, df$x18_49_rating_share)
-
-# rice
-
-df |>
-  filter(!is.na(x18_49_rating_share)) |>
-  filter(x18_49_rating_share <= 10) |> 
-  ggplot(aes(x = viewers_in_millions, y = x18_49_rating_share)) +
-  geom_point(alpha = 0.75) +
-  geom_smooth(colour = '#9d0006', fill = '#9d0006', alpha = 0.35) +
-  theme(axis.text.y = element_text(angle = 0, hjust = 1)) +
-  theme_wsj() +
-  ggtitle("rating ~ views")
-
 # model ----
 
 # checking assumptions
@@ -136,6 +118,7 @@ shapiro.test(df$x18_49_rating_share)
 # non-parametric way
 
 ## Spearman's rank correlation
+### https://www.perplexity.ai/search/spearman-s-rank-correlation-rh-Vyis3naNRdmCd_qVq.50zA
 
 cor.test(
   df$viewers_in_millions, 
@@ -147,7 +130,7 @@ cor.test(
 
 gam_model <- gam(x18_49_rating_share ~ s(viewers_in_millions), data = df)
 
-# Create a dataframe for predictions
+### dataframe for predictions
 dfmodel <- data.frame(viewers_in_millions = seq(min(df$viewers_in_millions, na.rm = TRUE),
   max(df$viewers_in_millions, na.rm = TRUE),
   length.out = 100
@@ -155,13 +138,6 @@ dfmodel <- data.frame(viewers_in_millions = seq(min(df$viewers_in_millions, na.r
 
 # predicted values from the model
 dfmodel$x18_49_rating_share <- predict(gam_model, newdata = dfmodel)
-
-# plot the original data and the fitted smooth curve
-ggplot(df, aes(x = viewers_in_millions, y = x18_49_rating_share)) +
-  geom_point(alpha = 0.75) +
-  geom_line(data = dfmodel, aes(x = viewers_in_millions, y = x18_49_rating_share), color = "red") +
-  theme_minimal() +
-  labs(title = "gam fit: rating ~ views", x = "viewers in millions", y = "18-49 rating share")
 
 # extract smooth terms
 smooth_terms <- summary(gam_model)$s.table
@@ -171,23 +147,49 @@ print(smooth_terms)
 # diagnostic plots for the gam model
 gam.check(gam_model)
 
-
 summary(gam_model)
 
 report(gam_model)
 
+# visualise ----
+
+# raw
+
+plot(df$viewers_in_millions, df$x18_49_rating_share)
+
+# rice
+
 df |>
   filter(!is.na(x18_49_rating_share)) |>
-  filter(x18_49_rating_share <= 10) |> 
-  ggplot(aes(x = viewers_in_millions, y = x18_49_rating_share)) +
+  filter(x18_49_rating_share <= 10) |>
+  ggplot(aes(
+    x = viewers_in_millions,
+    y = x18_49_rating_share)
+  ) +
   geom_point(alpha = 0.75) +
-  stat_smooth(method = "gam", formula = y ~ s(x), color = '#9d0006', fill = '#9d0006') +
-  theme(axis.text.y = element_text(angle = 0, hjust = 1)) +
+  geom_smooth(
+    colour = '#9d0006',
+    fill = '#9d0006',
+    alpha = 0.35,
+    method = 'loess'
+  ) +
   theme_wsj() +
-  ggtitle("rating ~ views") +
+  labs(
+    title = "American Idol",
+    subtitle = "generalized additive model for rating by views
+    ",
+    caption = "
+    data pulled from https://t.ly/gzffd by https://github.com/federicoalegria",
+    x = "viewers in millions",
+    y = "rating"
+  ) +
+  theme(
+    axis.text = element_text(family = 'Roboto Mono'),
+    plot.title = element_text(size = 18, family = 'Roboto Mono'),
+    plot.subtitle = element_text(size = 15, family = 'Roboto Mono'),
+    plot.caption = element_text(size = 10, family = 'Roboto Mono')
+  ) +
   ylim(0, 10)
-
-
 
 # ...
 
