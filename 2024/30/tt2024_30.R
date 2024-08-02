@@ -7,8 +7,10 @@
 # packages
 pacman::p_load(
   data.table,           # https://cran.r-project.org/web/packages/data.table/
+  easystats,            # https://cran.r-project.org/web/packages/easystats/
   ggthemes,             # https://cran.r-project.org/web/packages/ggthemes/
   janitor,              # https://cran.r-project.org/web/packages/janitor/
+  mgcv,                 # https://cran.r-project.org/web/packages/mgcv/
   skimr,                # https://cran.r-project.org/web/packages/skimr/
   styler,               # https://cran.r-project.org/web/packages/styler/
   tidyverse             # https://cran.r-project.org/web/packages/tidyverse/
@@ -23,7 +25,7 @@ df <-
   ) |>
   clean_names()
 # dictionary
-# https://raw.
+# https://t.ly/gzffd
 
 # Understand ----
 
@@ -131,11 +133,62 @@ shapiro.test(df$x18_49_rating_share)
 #   sd(df$x18_49_rating_share, na.rm = TRUE)
 # )
 
-# ...
+# non-parametric way
 
-# https://chatgpt.com/c/~
-# alright, but it happens that my data shows some linearity, 
-# so i would like to perform a non-parametric equivalent 
-# of the simple linear regression
+## Spearman's rank correlation
+
+cor.test(
+  df$viewers_in_millions, 
+  df$x18_49_rating_share,
+  method = 'spearman'
+)
+
+## generalized additive model (gam)
+
+gam_model <- gam(x18_49_rating_share ~ s(viewers_in_millions), data = df)
+
+# Create a dataframe for predictions
+dfmodel <- data.frame(viewers_in_millions = seq(min(df$viewers_in_millions, na.rm = TRUE),
+  max(df$viewers_in_millions, na.rm = TRUE),
+  length.out = 100
+))
+
+# predicted values from the model
+dfmodel$x18_49_rating_share <- predict(gam_model, newdata = dfmodel)
+
+# plot the original data and the fitted smooth curve
+ggplot(df, aes(x = viewers_in_millions, y = x18_49_rating_share)) +
+  geom_point(alpha = 0.75) +
+  geom_line(data = dfmodel, aes(x = viewers_in_millions, y = x18_49_rating_share), color = "red") +
+  theme_minimal() +
+  labs(title = "gam fit: rating ~ views", x = "viewers in millions", y = "18-49 rating share")
+
+# extract smooth terms
+smooth_terms <- summary(gam_model)$s.table
+
+print(smooth_terms)
+
+# diagnostic plots for the gam model
+gam.check(gam_model)
+
+
+summary(gam_model)
+
+report(gam_model)
+
+df |>
+  filter(!is.na(x18_49_rating_share)) |>
+  filter(x18_49_rating_share <= 10) |> 
+  ggplot(aes(x = viewers_in_millions, y = x18_49_rating_share)) +
+  geom_point(alpha = 0.75) +
+  stat_smooth(method = "gam", formula = y ~ s(x), color = '#9d0006', fill = '#9d0006') +
+  theme(axis.text.y = element_text(angle = 0, hjust = 1)) +
+  theme_wsj() +
+  ggtitle("rating ~ views") +
+  ylim(0, 10)
+
+
+
+# ...
 
 # Communicate ----
