@@ -50,7 +50,6 @@ df$x18_49_rating_share <- as.double(df$x18_49_rating_share)
 # model ----
 
 # checking assumptions
-## https://www.youtube.com/watch?v=sDrAoR17pNM
 ## https://chatgpt.com/c/ebdee2ae-53d7-4721-9da8-578473413caf
 
 ## visual inspection
@@ -194,3 +193,6 @@ df |>
 # ...
 
 # Communicate ----
+
+# for #tidytuesday 2024§30 i learned about the existence of generalized additive models
+# https://github.com/federicoalegria/_tidytuesday/tree/main/2024/30
