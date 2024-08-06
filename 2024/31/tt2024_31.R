@@ -10,7 +10,8 @@ pacman::p_load(
   janitor,              # https://cran.r-project.org/web/packages/janitor/
   skimr,                # https://cran.r-project.org/web/packages/skimr/
   styler,               # https://cran.r-project.org/web/packages/styler/
-  tidyverse             # https://cran.r-project.org/web/packages/tidyverse/
+  tidyverse,            # https://cran.r-project.org/web/packages/tidyverse/
+  treemap               # https://cran.r-project.org/web/packages/treemap/
 )
 
 # Import ----
@@ -20,24 +21,18 @@ df00 <-
     'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-30/summer_movie_genres.csv'
   ) |>
   clean_names()
-
-df01 <-
-  fread(
-    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-07-30/summer_movies.csv'
-  ) |>
-  clean_names()
 # dictionary
 # https://t.ly/B2XD8
 
 # Understand ----
 
 # names
-df01 |> 
+df00 |> 
   slice(0) |> 
   glimpse()
 
 # glimpse & skim
-df01 |>
+df00 |>
   glimpse() |>
   skim()
 
@@ -49,20 +44,35 @@ df00 |>
 
 # visualise ----
 
-# raw
-df00 |> 
-  filter(!is.na(genres)) |> 
-  count(genres) |> 
-  arrange(desc(n)) |> 
-  ggplot(aes(x = reorder(genres, n), y = n)) +
-  geom_col(
-    position = "identity",
-    width = 0.5
-  ) +
-  coord_flip() +
-  labs(x = "genres", y = " ")
+# set up the plotting device with desired size
+png(
+  'binder/selfdev/dslc/tidytuesday/etc/png/2024/tt2024_31.treemap.png',
+   width = 800,
+   height = 800
+)
 
-# rice
+# treemap
+df00 |>
+  filter(!is.na(genres)) |> 
+  group_by(genres) |>
+  summarise(n = n()) |>
+  arrange(desc(n)) |>
+  filter(n >= 30) |>
+  mutate(label = paste(genres, n, sep = "\n")) |>
+  treemap(
+    index = "label",
+    vSize = "n",
+    type = "index",
+    palette = "RdYlBu",
+    title = "top genres for watching summer films",
+    fontsize.title = 23,
+    fontfamily.title = "sans bold",
+    fontsize.labels = 18,
+    fontfamily.labels = "mono"
+)
+
+# close the plotting device
+dev.off()
 
 # model ----
 
