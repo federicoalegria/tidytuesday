@@ -63,7 +63,7 @@ df00 |>
     index = "label",
     vSize = "n",
     type = "index",
-    palette = "RdYlBu",
+    palette = "Set2",
     title = "top genres for watching summer films",
     fontsize.title = 23,
     fontfamily.title = "sans bold",
