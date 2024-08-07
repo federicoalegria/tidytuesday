@@ -78,4 +78,6 @@ dev.off()
 
 # Communicate ----
 
-# ...
+# for #tidytuesday 2024§31
+# i dusted out the {treemap} package for showing top genres for summer-related movies
+# https://github.com/federicoalegria/_tidytuesday/edit/main/2024/31/tt2024_31.R
