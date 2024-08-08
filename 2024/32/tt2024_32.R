@@ -26,28 +26,40 @@ df <-
 
 # names
 df |> 
+  filter(sport == "Curling") |>
   slice(0) |> 
   glimpse()
 
 # glimpse & skim
 df |>
+  filter(sport == "Curling") |>
   glimpse() |>
   skim()
-
-# transform ---
 
 # visualise ----
 
 # raw
-# rice
+
+## violin plot
+df |> 
+  filter(!is.na(height) & !is.na(weight) & !is.na(medal)) |>         # filter na values
+  mutate(bmi = weight / ((height / 100) ^ 2)) |>     # calculate bmi
+  select(bmi, medal) |> 
+  ggplot(aes(x = medal, y = bmi)) +
+  geom_violin()
 
 # model ----
 
-# Communicate ----
-# ...
-
+## scatter plot
 df |> 
   filter(sport == "Curling") |>
   ggplot(aes(x = height, y = weight, colour = sex)) +
   geom_point() +
+  geom_smooth(method = 'lm') +
   scale_color_brewer(palette = 'Accent')
+
+# Communicate ----
+
+# ...
+
+# does bmi influence the outcomes?
