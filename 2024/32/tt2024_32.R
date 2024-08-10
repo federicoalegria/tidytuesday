@@ -11,6 +11,7 @@ pacman::p_load(
   ggstatsplot,          # https://cran.r-project.org/web/packages/ggstatsplot/
   janitor,              # https://cran.r-project.org/web/packages/janitor/
   nortest,              # https://cran.r-project.org/web/packages/nortest/
+  patchwork,            # https://cran.r-project.org/web/packages/patchwork/
   skimr,                # https://cran.r-project.org/web/packages/skimr/
   styler,               # https://cran.r-project.org/web/packages/styler/
   tidyverse             # https://cran.r-project.org/web/packages/tidyverse/
@@ -41,7 +42,8 @@ df |>
 
 # model ----
 
-df |>
+p1 <- 
+  df |>
   filter(sport == "Curling") |>
   ggplot(aes(x = height, y = weight, colour = sex)) +
   geom_jitter(alpha = 0.35) +
@@ -49,8 +51,9 @@ df |>
   geom_mark_hull(aes(label = sex)) +
   scale_color_manual(values = c("F" = "#D79921",
                                 "M" = "#B16286")) +
-  theme_minimal() +
-  theme(legend.position = 'none')
+  theme_ggstatsplot() +
+  theme(legend.position = 'none') +
+  ggtitle("height and weight relationship by sex")
 
 # check for normality
 
@@ -72,18 +75,34 @@ df |>
   ks.test("pnorm")
 
 # nonparametric way
-df |>
+p2 <- 
+  df |>
   filter(sport == "Curling") |>
   filter(!is.na(height) & !is.na(weight) & !is.na(medal)) |>
   mutate(bmi = weight / ((height / 100) ^ 2)) |>
   select(bmi, medal) |>
   ggbetweenstats(x = medal,
                  y = bmi,
-                 type = "nonparametric")
+                 type = "nonparametric") +
+  ggtitle("bmi according to outcome")
 
 # Communicate ----
 
-# does bmi influence the outcomes?
+p1 + p2 +
+  plot_annotation(
+    title = "A Curling Overview",
+    subtitle = "BMI data from Athens 1896 to Rio 2016
+    ",
+    caption = "
+    data pulled from https://t.ly/5esU- by https://github.com/federicoalegria",
+    theme = theme(
+      plot.title = element_text(family = 'Roboto', face = 'bold', size = 18),
+      plot.subtitle = element_text(family = 'Roboto', size = 15),
+      plot.caption = element_text(size = 9, family = 'Mono')
+    )
+)
 
-# ...
-
+# for #tidytuesday 2024§32 i evaluated if body mass index 
+# have had an influence on Olympic Curling results
+# and there's not enough evidence to conclude it has
+# https://github.com/federicoalegria/_tidytuesday/tree/main/2024/32
