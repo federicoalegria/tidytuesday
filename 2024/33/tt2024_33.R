@@ -66,3 +66,30 @@ df |>
 # Does the length of a Fair depend on the month in which the fair begins? 
 # How has the cost per month changed over time? How about the cost per visitor?
 
+## https://chatgpt.com/share/255a7b6b-e404-4001-bc01-c08c3e7deae3
+
+df |> 
+  mutate(
+    fair_duration = (end_year * 12 + end_month) - (start_year * 12 + start_month)) |> 
+  select(country, theme, fair_duration) |> 
+  glimpse() |> 
+  skim()
+
+df |> 
+  mutate(
+    fair_duration = (end_year * 12 + end_month) - (start_year * 12 + start_month)) |> 
+  ggplot(aes(x = factor(start_month), y = fair_duration)) +
+  geom_boxplot() +
+  labs(x = "Start Month", y = "Fair Duration (months)", title = "Fair Duration by Start Month")
+
+df |> 
+  mutate(
+    fair_duration = (end_year * 12 + end_month) - (start_year * 12 + start_month),
+    cost_per_month = cost / fair_duration,
+    cost_per_visitor = cost / visitors
+  ) |> 
+  ggplot(aes(x = start_year + start_month / 12)) +
+  geom_line(aes(y = cost_per_month, color = "Cost per Month")) +
+  geom_line(aes(y = cost_per_visitor, color = "Cost per Visitor")) +
+  labs(x = "Year", y = "Cost", title = "Cost per Month and Cost per Visitor over Time") +
+  scale_color_manual(name = "Metric", values = c("Cost per Month" = "blue", "Cost per Visitor" = "red"))
