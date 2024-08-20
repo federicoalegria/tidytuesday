@@ -93,3 +93,8 @@ df |>
   geom_line(aes(y = cost_per_visitor, color = "Cost per Visitor")) +
   labs(x = "Year", y = "Cost", title = "Cost per Month and Cost per Visitor over Time") +
   scale_color_manual(name = "Metric", values = c("Cost per Month" = "blue", "Cost per Visitor" = "red"))
+
+# ...
+
+# fork & tweak
+# https://github.com/mitsuoxv/tidytuesday/blob/main/2024_08_13_worlds_fairs.qmd
