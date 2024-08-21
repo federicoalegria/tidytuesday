@@ -34,67 +34,47 @@ df |>
   glimpse() |>
   skim()
 
-# group
-
-## country
+# count
 df |> 
-  group_by(country) |> 
-  summarise(n = n()) |> 
-  arrange(desc(n)) |> 
-  print(n = Inf)
+  count(country)
 
-## theme
 df |> 
-  group_by(theme) |> 
-  summarise(n = n()) |> 
-  arrange(desc(n)) |> 
-  print(n = Inf)
+  count(theme)
 
 # transform ---
 
-# visualise ----
-
-# raw
-# rice
-
-# model ----
-
-# Communicate ----
-
-# ...
-
-# Does the length of a Fair depend on the month in which the fair begins? 
-# How has the cost per month changed over time? How about the cost per visitor?
-
-## https://chatgpt.com/share/255a7b6b-e404-4001-bc01-c08c3e7deae3
-
+# duration
 df |> 
-  mutate(
-    fair_duration = (end_year * 12 + end_month) - (start_year * 12 + start_month)) |> 
-  select(country, theme, fair_duration) |> 
-  glimpse() |> 
-  skim()
-
-df |> 
-  mutate(
-    fair_duration = (end_year * 12 + end_month) - (start_year * 12 + start_month)) |> 
-  ggplot(aes(x = factor(start_month), y = fair_duration)) +
-  geom_boxplot() +
-  labs(x = "Start Month", y = "Fair Duration (months)", title = "Fair Duration by Start Month")
-
-df |> 
-  mutate(
-    fair_duration = (end_year * 12 + end_month) - (start_year * 12 + start_month),
-    cost_per_month = cost / fair_duration,
-    cost_per_visitor = cost / visitors
-  ) |> 
-  ggplot(aes(x = start_year + start_month / 12)) +
-  geom_line(aes(y = cost_per_month, color = "Cost per Month")) +
-  geom_line(aes(y = cost_per_visitor, color = "Cost per Visitor")) +
-  labs(x = "Year", y = "Cost", title = "Cost per Month and Cost per Visitor over Time") +
-  scale_color_manual(name = "Metric", values = c("Cost per Month" = "blue", "Cost per Visitor" = "red"))
+  mutate(duration = 12 * (end_year - start_year) + end_month - start_month) |> 
+  filter(duration != 0) |> 
+  group_by(duration) |> 
+  summarise(n = n()) |> 
+  arrange(desc(n)) |> 
+  print(n = Inf)
 
 # ...
 
 # fork & tweak
 # https://github.com/mitsuoxv/tidytuesday/blob/main/2024_08_13_worlds_fairs.qmd
+
+df |> 
+  filter(category == "World Expo", !is.na(visitors)) |> 
+  mutate(
+    region = case_when(
+      country %in% c("United States", "Canada") ~ "North America",
+      country %in% c("Japan", "People's Republic of China") ~ "Far East",
+      country == "Colony of Victoria" ~ "Oceania",
+      country == "United Arab Emirates" ~ "Middle East",
+      .default = "Europe"
+    ),
+    region = factor(region, levels = c("Europe", "North America", "Oceania", "Middle East", "Far East"))
+  ) |> 
+  ggplot(aes(visitors, factor(start_year))) +
+  geom_col(aes(fill = region)) +
+  geom_text(aes(label = city), vjust = 0.5, hjust = -0.1, size = 3) +
+  scale_x_continuous(expand = expansion(add = c(0, 12))) +
+  labs(x = "Number of visitors (million)", y = "World Expo Year",
+       fill = "Region",
+       title = "Largest visitors in 2010 Shanghai Expo",
+       caption = "Source: List of world expositions (Wikipedia)") +
+  theme(panel.grid.major.y = element_blank())
