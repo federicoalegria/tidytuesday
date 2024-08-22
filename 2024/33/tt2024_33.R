@@ -79,8 +79,12 @@ df |>
     x = "visitors in millions",
     y = "world expo year",
     fill = "region",
-    title = " ",
-    caption = " "
+    title = "world expositions",
+    subtitle = "visitors per year according to region",
+    caption = "
+    Oceania has been filtered out
+    data pulled from https://t.ly/wRUcT by https://github.com/federicoalegria
+    "
   ) +
   scale_fill_manual(
     values = c(
@@ -92,11 +96,14 @@ df |>
   ) +
   theme_wsj() +
   theme(
-    text = element_text(family = 'Roboto'),
-    axis.text.y = element_text(size = 8, family = 'Roboto'),
-    axis.title.y = element_text(size = 10, family = 'Roboto'),
+    axis.text.x = element_text(family = 'Roboto', colour = '#505050', size = 10),
+    axis.title.x = element_text(family = 'Roboto', face = 'bold', colour = '#505050', size = 10),
+    axis.text.y = element_text(family = 'Roboto', colour = '#505050', size = 10),
+    axis.title.y = element_text(family = 'Roboto', face = 'bold', colour = '#505050', size = 10),
     legend.title = element_blank(),
-    legend.text = element_text(size = 10, family = 'Roboto'),
-    plot.title = element_text(size = 14, family = 'Roboto'),
-    plot.caption = element_text(size = 10, family = 'Roboto')
+    legend.text = element_text(family = 'Roboto', colour = '#505050', size = 10),
+    plot.title = element_text(family = 'Roboto', colour = '#505050', size = 18),
+    plot.subtitle = element_text(family = 'Roboto', colour = '#505050', size = 14),
+    plot.caption = element_text(family = 'Roboto', colour = '#505050', size = 10),
+    text = element_text(family = 'Roboto')
 )
