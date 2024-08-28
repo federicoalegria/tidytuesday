@@ -143,8 +143,7 @@ df |>
   arrange(year) |> 
   knitr::kable()
 
-# Communicate ----
-# ...
+# Cleveland plot
 
 df |> 
   mutate(
@@ -184,18 +183,18 @@ df |>
       alpha = 0.9,
       size = 3.5
     ) +
-    geom_text(
-      aes(x = age_diff, y = king_age, label = king),
-      hjust = 1.5,
-      size = 3,
-      family = 'Consolas'
-    ) +
-    geom_text(
-      aes(x = age_diff, y = consort_age, label = consort),
-      hjust = -0.5,
-      size = 3,
-      family = 'Consolas'
-    ) +
+    # geom_text(
+    #   aes(x = age_diff, y = king_age, label = king),
+    #   hjust = 1.5,
+    #   size = 3,
+    #   family = 'Consolas'
+    # ) +
+    # geom_text(
+    #   aes(x = age_diff, y = consort_age, label = consort),
+    #   hjust = -0.5,
+    #   size = 3,
+    #   family = 'Consolas'
+    # ) +
     coord_flip() +
     theme_minimal() +
     theme(
@@ -209,3 +208,6 @@ df |>
     ylab("") +
     labs(title = "", subtitle = "", caption = "") +
     facet_wrap(~ period)
+
+# Communicate ----
+# ...
