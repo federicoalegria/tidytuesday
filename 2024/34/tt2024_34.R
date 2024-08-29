@@ -164,7 +164,7 @@ df |>
   ) |> 
   filter(!is.na(year) & !is.na(age_diff)) |> 
   arrange(desc(age_diff)) |> 
-  ggplot(y = reorder(age_diff, age_diff)) +
+  ggplot(aes(y = reorder(age_diff, age_diff))) +
     geom_segment(aes(
       x = age_diff,
       xend = age_diff,
@@ -179,35 +179,27 @@ df |>
     ) +
     geom_point(
       aes(x = age_diff, y = consort_age),
-      color = '#98971a',
+      color = '#a286fd',
       alpha = 0.9,
       size = 3.5
     ) +
-    # geom_text(
-    #   aes(x = age_diff, y = king_age, label = king),
-    #   hjust = 1.5,
-    #   size = 3,
-    #   family = 'Consolas'
-    # ) +
-    # geom_text(
-    #   aes(x = age_diff, y = consort_age, label = consort),
-    #   hjust = -0.5,
-    #   size = 3,
-    #   family = 'Consolas'
-    # ) +
     coord_flip() +
     theme_minimal() +
     theme(
       legend.position = 'none',
       text = element_text(family = 'Roboto Mono'),
-      plot.title = element_text(face = 'bold'),
-      plot.subtitle = element_text(family = 'Consolas'),
-      plot.caption = element_text(family = 'Consolas')
+      plot.title = element_text(family = 'Roboto Mono', face = 'bold', size = 23),
+      plot.subtitle = element_text(family = 'Roboto Mono', size = 18),
+      plot.caption = element_text(family = 'Roboto Mono', size = 11),
+      strip.text = element_text(family = 'Roboto Mono', face = 'bold', size = 13)
     ) +
-    xlab("") +
-    ylab("") +
-    labs(title = "", subtitle = "", caption = "") +
+    xlab("age difference in total") +
+    ylab("age difference in between") +
+    labs(
+      title = "English Monarchs and Marriages", 
+      subtitle = "Age differences for kings and consorts by time period
+      ", 
+      caption = "
+      Data pulled from https://t.ly/sJYmT by https://github.com/federicoalegria"
+    ) +
     facet_wrap(~ period)
-
-# Communicate ----
-# ...
