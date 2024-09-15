@@ -7,10 +7,12 @@
 # packages
 pacman::p_load(
   data.table,           # https://cran.r-project.org/web/packages/data.table/
+  ggthemes,             # https://cran.r-project.org/web/packages/ggthemes/
   janitor,              # https://cran.r-project.org/web/packages/janitor/
   skimr,                # https://cran.r-project.org/web/packages/skimr/
   styler,               # https://cran.r-project.org/web/packages/styler/
-  tidyverse             # https://cran.r-project.org/web/packages/tidyverse/
+  tidyverse,            # https://cran.r-project.org/web/packages/tidyverse/
+  viridis               # https://cran.r-project.org/web/packages/viridis/
 )
 
 # Import ----
@@ -26,7 +28,7 @@ df1 <-
   ) |>
   clean_names()
 # dictionary
-# https://raw.
+# https://t.ly/0ci94
 
 # Understand ----
 
@@ -66,16 +68,9 @@ df0 |>
     title = "IMDb rating", 
     subtitle = "Power Rangers by season",
     caption = "
-    data pulled from https://t.ly/0ci94 by https://github.com/federicoalegria")
-  theme_minimal() +
-    theme(
-      axis.text.y = element_text(size = 10),
-      axis.text.x = element_text(size = 10),
-      legend.position = "none")
-
-# rice
-
-# model ----
-
-# Communicate ----
-# ...
+    data pulled from https://t.ly/0ci94 by https://github.com/federicoalegria") +
+  theme_wsj() +
+  theme(
+    legend.position = 'none',
+    plot.caption = element_text(size = 10)
+)
