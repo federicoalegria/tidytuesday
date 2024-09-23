@@ -7,6 +7,7 @@
 # packages
 pacman::p_load(
   data.table,           # https://cran.r-project.org/web/packages/data.table/
+  ggstatsplot,          # https://cran.r-project.org/web/packages/ggstatsplot/
   janitor,              # https://cran.r-project.org/web/packages/janitor/
   skimr,                # https://cran.r-project.org/web/packages/skimr/
   styler,               # https://cran.r-project.org/web/packages/styler/
@@ -60,14 +61,55 @@ df_sssr |>
   glimpse() |>
   skim()
 
-# transform ----
+df_qlsrc |> 
+  filter(qname == "dev_type")
 
-# visualise ----
+df_sssr |> 
+  filter(dev_type == 1, !is.na(country)) |> 
+  group_by(country) |> 
+  summarise(n = n(), .groups = 'drop') |> 
+  arrange(desc(n)) |> 
+  print(n = Inf)
 
-# raw
-# rice
+df_sssr |> 
+  filter(country %in% c(
+    "Germany",
+    "United States of America"
+    )
+  ) |> 
+  filter(dev_type == 1, !is.na(comp_total)) |> 
+  group_by(country) |> 
+  summarise(
+    mean = mean(comp_total),
+    median = median(comp_total),
+    iqr = IQR(comp_total),
+    min = min(comp_total),
+    max = max(comp_total),
+    total = sum(comp_total)
+  )
 
-# model ----
+# Analyse ----
+
+# check for normality
+
+## analitically
+df_sssr |>
+  filter(country %in% c("Germany",
+                        "United States of America")) |>
+  pull(comp_total) |>
+  ks.test("pnorm")
+
+# nonparametric way
+df_sssr |>
+  filter(country %in% c("Germany",
+                        "United States of America")) |>
+  filter(dev_type == 1,!is.na(comp_total)) |>
+  ggbetweenstats(x = country,
+                 xlab = " ",
+                 y = comp_total,
+                 ylab = "compensation",
+                 type = 'nonparametric')
 
 # Communicate ----
-# ...
+
+# for tt2024_36, i explored total compensation for academic researchers between Germany & USA
