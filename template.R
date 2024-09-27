@@ -1,7 +1,7 @@
 # --- TIDYTUESDAY::YYYY§WW --- #
 # https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/...
 
-# library path
+# lib
 .libPaths(c("~/.R/x86_64-pc-linux-gnu-library/4.4", .libPaths()))
 
 # packages
