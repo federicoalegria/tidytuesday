@@ -7,10 +7,13 @@
 # packages
 pacman::p_load(
   data.table,           # https://cran.r-project.org/web/packages/data.table/
+  ggdark,               # https://cran.r-project.org/web/packages/ggdark/
   janitor,              # https://cran.r-project.org/web/packages/janitor/
+  patchwork,            # https://cran.r-project.org/web/packages/patchwork/
   skimr,                # https://cran.r-project.org/web/packages/skimr/
-  styler,               # https://cran.r-project.org/web/packages/styler/
-  tidyverse             # https://cran.r-project.org/web/packages/tidyverse/
+  tidyverse,            # https://cran.r-project.org/web/packages/tidyverse/
+  tidytext,             # https://cloud.r-project.org/web/packages/tidytext/
+  udpipe                # https://cran.r-project.org/web/packages/udpipe/
 )
 
 # Import ----
