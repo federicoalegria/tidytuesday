@@ -54,16 +54,30 @@ lapply(dfs, function(df) {
   }
 )
 
-# transform ----
-
 # visualise ----
 
-# raw
-# rice
-
-# model ----
+df01 |> 
+  filter(
+    country %in% c(
+      "Costa Rica",
+      "El Salvador",
+      "Guatemala",
+      "Honduras",
+      "Nicaragua"
+    )
+  ) |> 
+  select(year, country, total, award) |> 
+  group_by(country) |> 
+  summarise(total = sum(total)) |> 
+  arrange(desc(total)) |> 
+  knitr::kable()
 
 # Communicate ----
 
-# ...
-
+# |country     | total|
+# |:-----------|-----:|
+# |Costa Rica  |  1072|
+# |El Salvador |   610|
+# |Nicaragua   |   249|
+# |Honduras    |   184|
+# |Guatemala   |   160|
