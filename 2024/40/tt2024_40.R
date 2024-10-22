@@ -26,7 +26,7 @@ df <-
 
 # names
 df |> 
-  slice(0) |> 
+  slice(1:3) |> 
   glimpse()
 
 # glimpse & skim
@@ -42,6 +42,8 @@ df |>
 # rice
 
 # model ----
+
+# https://www.perplexity.ai/search/what-deos-a-variable-rated-t-f-YxqSRVF1SBqiIhElhuMMIg
 
 # Communicate ----
 # ...
