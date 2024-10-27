@@ -36,6 +36,14 @@ df |>
 
 # transform ----
 
+df |> 
+  mutate(
+    draw = as.integer(victory_status == "draw"),
+    mate = as.integer(victory_status == "mate"),
+    outoftime = as.integer(victory_status == "outoftime"),
+    resign = as.integer(victory_status == "resign")
+  )
+
 # visualise ----
 
 # raw
@@ -43,6 +51,7 @@ df |>
 
 # model ----
 
+# https://www.youtube.com/watch?v=_yNWzP5HfGw
 # https://www.perplexity.ai/search/what-deos-a-variable-rated-t-f-YxqSRVF1SBqiIhElhuMMIg
 
 # Communicate ----
