@@ -10,7 +10,7 @@ pacman::p_load(
   janitor,              # https://cran.r-project.org/web/packages/janitor/
   skimr,                # https://cran.r-project.org/web/packages/skimr/
   styler,               # https://cran.r-project.org/web/packages/styler/
-  tidyverse             # https://cran.r-project.org/web/packages/tidyverse/
+  tidymodels             # https://cran.r-project.org/web/packages/tidymodels/
 )
 
 # Import ----
@@ -36,23 +36,56 @@ df |>
 
 # transform ----
 
-df |> 
+dfs <- 
+  df |> 
   mutate(
     draw = as.integer(victory_status == "draw"),
     mate = as.integer(victory_status == "mate"),
     outoftime = as.integer(victory_status == "outoftime"),
     resign = as.integer(victory_status == "resign")
-  )
-
-# visualise ----
-
-# raw
-# rice
+  ) |> 
+  select(turns, draw:resign) |> 
+  filter(turns <= 200)
 
 # model ----
 
 # https://www.youtube.com/watch?v=_yNWzP5HfGw
 # https://www.perplexity.ai/search/what-deos-a-variable-rated-t-f-YxqSRVF1SBqiIhElhuMMIg
+
+# split
+
+set.seed(2)
+
+split <- initial_split(
+  dfs,
+  prop = .8,
+  strata = outoftime
+)
+
+dfs_train <- training(split)
+
+dfs_test <- testing(split)
+
+View(dfs_train)
+
+# visualise ----
+
+ggplot(dfs_train, aes(
+  x = turns,
+  y = outoftime
+  )) +
+  geom_jitter(
+    height = .05,
+    alpha = .5) +
+  geom_smooth(
+    method = 'glm',
+    method.args = list(family = 'binomial'),
+    se = FALSE
+  ) + 
+  theme_minimal()
+
+# data looks like not a good candidate for building a logistic regression model
+# with for a binary response variable y with a quantitative explainer x
 
 # Communicate ----
 # ...
