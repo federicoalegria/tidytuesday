@@ -1,5 +1,5 @@
-# --- TIDYTUESDAY::YYYY§WW --- #
-# https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/...
+# --- TIDYTUESDAY::2024§41 --- #
+# https://github.com/rfordatascience/tidytuesday/blob/master/data/2024/2024-10-08/readme.md
 
 # library path
 .libPaths(c("~/.R/x86_64-pc-linux-gnu-library/4.4", .libPaths()))
@@ -16,11 +16,11 @@ pacman::p_load(
 # Import ----
 df <-
   fread(
-    'link.csv'
+    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-10-08/most_visited_nps_species_data.csv'
   ) |>
   clean_names()
 # dictionary
-# https://raw.
+# https://t.ly/-yW0s
 
 # Understand ----
 
@@ -34,13 +34,12 @@ df |>
   glimpse() |>
   skim()
 
-# tokenize
-# df |>
-#   unnest_tokens(output = word, input = variable) |>
-#   anti_join(stop_words, by = "word") |>
-#   group_by(word) |>
-#   summarise(n = n()) |>
-#   arrange(desc(n))
+df |> 
+  filter(category_name == "Reptile") |> 
+  drop_na(family) |>
+  group_by(family) |>
+  summarise(n = n()) |> 
+  arrange(desc(n))
 
 # transform ----
 
