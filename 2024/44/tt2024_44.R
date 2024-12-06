@@ -1,4 +1,4 @@
-# --- TIDYTUESDAY::YYYY§WW --- #
+# --- TIDYTUESDAY::2024§44 --- #
 # https://github.com/rfordatascience/tidytuesday/blob/master/data/2024/2024-10-29/readme.md
 
 # library path
@@ -48,12 +48,28 @@ df01 |>
   glimpse() |>
   skim()
 
+# group
+df01 |> 
+  group_by(title_type) |> 
+  summarise(n = n())
+
 # transform ----
 
 # visualise ----
+
+df01 |> 
+  ggplot(aes(
+    x = runtime_minutes, 
+    y = average_rating)
+  ) + geom_point()
 
 # model ----
 
 # Communicate ----
 
 # ...
+
+# has runtime changed through the years?
+# evaluate `runtime_minutes` and `average_rating`
+# evaluate `average_rating` and `num_votes`
+# evaluate according to `title_type`
