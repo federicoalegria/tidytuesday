@@ -60,8 +60,20 @@ df01 |>
 df01 |> 
   ggplot(aes(
     x = runtime_minutes, 
-    y = average_rating)
-  ) + geom_point()
+    y = average_rating,
+    colour = title_type)
+  ) + geom_point() +
+  facet_grid(title_type ~ .) +
+  geom_smooth(method = 'lm')
+
+df01 |> 
+  filter(title_type == "tvMovie") |> 
+    ggplot(aes(
+      x = runtime_minutes, 
+      y = average_rating,
+      colour = title_type)
+    ) + geom_point() +
+    geom_smooth(method = 'lm')
 
 # model ----
 
