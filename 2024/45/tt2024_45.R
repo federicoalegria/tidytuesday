@@ -1,5 +1,5 @@
 # --- TIDYTUESDAY::2024§45 --- #
-# https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-11-12/readme.md
+# https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-11-05/readme.md
 
 # library path
 .libPaths(c("~/.R/x86_64-pc-linux-gnu-library/4.4", .libPaths()))
@@ -14,25 +14,13 @@ pacman::p_load(
 )
 
 # Import ----
-df00 <-
+df <-
   fread(
-    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-11-12/countries.csv'
-  ) |>
-  clean_names()
-
-df01 <-
-  fread(
-    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-11-12/country_subdivisions.csv'
-  ) |>
-  clean_names()
-
-df02 <-
-  fread(
-    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-11-12/former_countries.csv'
+    'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-11-05/democracy_data.csv'
   ) |>
   clean_names()
 # dictionary
-# https://t.ly/wGfnb
+# https://t.ly/vKfAX
 
 # Understand ----
 
