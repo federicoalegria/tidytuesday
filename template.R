@@ -1,4 +1,4 @@
-# --- TIDYTUESDAY::YYYY§WW --- #
+# --- tidytuesday::yy§ww --- #
 # https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/...
 
 # library path
@@ -9,11 +9,11 @@ pacman::p_load(
   data.table,           # https://cran.r-project.org/web/packages/data.table/
   janitor,              # https://cran.r-project.org/web/packages/janitor/
   skimr,                # https://cran.r-project.org/web/packages/skimr/
-  styler,               # https://cran.r-project.org/web/packages/styler/
+  tidytext,             # https://cran.r-project.org/web/packages/tidytext/
   tidyverse             # https://cran.r-project.org/web/packages/tidyverse/
 )
 
-# Import ----
+# import
 df <-
   fread(
     'link.csv'
@@ -22,7 +22,7 @@ df <-
 # dictionary
 # https://raw.
 
-# Understand ----
+# understand ----
 
 # names
 df |> 
@@ -48,6 +48,6 @@ df |>
 
 # model ----
 
-# Communicate ----
+# communicate ----
 
 # ...
