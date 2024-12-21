@@ -26,7 +26,7 @@ df01 <-
   ) |>
   clean_names()
 # dictionary
-# https://raw.
+# https://t.ly/FN7Nr
 
 # Understand ----
 
