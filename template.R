@@ -1,4 +1,4 @@
-# --- tidytuesday::yy§ww --- #
+# --- tidytuesday::yyww --- #
 # https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/...
 
 # library path
