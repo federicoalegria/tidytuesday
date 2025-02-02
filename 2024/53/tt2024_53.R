@@ -49,29 +49,35 @@ df04 <-
 # Understand ----
 
 # names
-df |> 
+df00 |> 
+  slice(0) |> 
+  glimpse()
+
+df01 |> 
+  slice(0) |> 
+  glimpse()
+
+df02 |> 
+  slice(0) |> 
+  glimpse()
+
+df03 |> 
+  slice(0) |> 
+  glimpse()
+
+df04 |> 
   slice(0) |> 
   glimpse()
 
 # glimpse & skim
-df |>
+df04 |>
   glimpse() |>
   skim()
 
-# tokenize
-# df |>
-#   unnest_tokens(output = word, input = variable) |>
-#   anti_join(stop_words, by = "word") |>
-#   group_by(word) |>
-#   summarise(n = n()) |>
-#   arrange(desc(n))
-
-# transform ----
-
 # visualise ----
 
-# model ----
-
-# Communicate ----
+df04 |> 
+  filter(rank == "Winner", year >= 2020) |> 
+  select(name, rank, restaurant, year)
 
 # ...
