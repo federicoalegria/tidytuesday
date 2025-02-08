@@ -1,7 +1,7 @@
 # --- tidytuesday::yyww --- #
-# https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/...
+# https://github.com/rfordatascience/tidytuesday/tree/master/data/...
 
-# library path
+# lib/path
 .libPaths(c("~/.R/x86_64-pc-linux-gnu-library/4.4", .libPaths()))
 
 # packages
@@ -13,7 +13,9 @@ pacman::p_load(
   tidyverse             # https://cran.r-project.org/web/packages/tidyverse/
 )
 
-# import
+# import ----
+
+# data
 df <-
   fread(
     'link.csv'
