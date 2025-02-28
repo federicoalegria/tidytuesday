@@ -66,17 +66,14 @@ df03|>
   glimpse() |>
   skim()
 
-# tokenize
-# df |>
-#   unnest_tokens(output = word, input = variable) |>
-#   anti_join(stop_words, by = "word") |>
-#   group_by(word) |>
-#   summarise(n = n()) |>
-#   arrange(desc(n))
-
 # transform ----
 
 # visualise ----
+
+df01 |> 
+  ggplot(aes(x = imdb_rating, y = us_viewers_in_millions)) +
+  geom_point() +
+  geom_smooth()
 
 # model ----
 
