@@ -33,25 +33,36 @@ df01 <-
 
 # names
 df01 |> 
-  slice(1:5) |> 
+  slice(0) |> 
   glimpse()
 
 # glimpse & skim
-df |>
+df01 |>
   glimpse() |>
   skim()
 
+# transform ----
+
+df01 |> 
+  select(where(is.integer)) |>
+    pivot_longer(
+      cols = everything(),
+      names_to = "critic",
+      values_to = "value"
+    )
+
 # visualise ----
 
-p1 <- df01 |> 
-  ggplot(aes(x = rotten_tomatoes)) +
+df01 |> 
+  select(where(is.integer)) |>
+    pivot_longer(
+      cols = everything(),
+      names_to = "critic",
+      values_to = "value"
+    ) |> 
+  drop_na(value) |> 
+  ggplot(aes(x = value, color = critic)) +
   geom_density()
-
-p2 <- df01 |> 
-  ggplot(aes(x = critics_choice)) +
-  geom_density()
-
-p1 + p2
 
 # model ----
 
