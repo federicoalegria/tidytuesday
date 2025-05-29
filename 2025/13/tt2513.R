@@ -49,8 +49,22 @@ df |>
 # model ----
 
 df |> 
-  ggplot(aes(x = height, y = weight)) +
+  filter(!is.na(generation_id)) |> 
+  mutate(generation_id = factor(generation_id, levels = unique(generation_id))) |> 
+  ggplot(aes(x = height, y = weight, col = generation_id)) +
   geom_point() +
-  geom_smooth()
+  geom_smooth() +
+  facet_wrap(~ generation_id)
 
-# ...
+df |> 
+  slice(1:802) |> 
+  mutate(generation = case_when(
+    id >= 1 & id <= 152 ~ "generation_01",
+    id >= 153 & id <= 251 ~ "generation_02",
+    id >= 252 & id <= 386 ~ "generation_03",
+    id >= 387 & id <= 493 ~ "generation_04",
+    id >= 494 & id <= 649 ~ "generation_05",
+    id >= 650 & id <= 721 ~ "generation_06",
+    id >= 722 & id <= 802 ~ "generation_07",
+    TRUE ~ NA_character_
+  ))
