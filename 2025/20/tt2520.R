@@ -54,6 +54,20 @@ df00 |>
   ggplot(aes(enterococci_cfu_100ml)) +
   geom_boxplot()
 
+df00 |> 
+  ggplot(aes(date, water_temperature_c)) +
+  geom_line()
+
+df00 |>
+  select(date, conductivity_ms_cm, enterococci_cfu_100ml, water_temperature_c) |> 
+  pivot_longer(
+    cols = c(enterococci_cfu_100ml, water_temperature_c, conductivity_ms_cm),
+    names_to = "variable",
+    values_to = "value"
+  ) |> 
+  ggplot(aes(date, value, colour = variable)) +
+  geom_line()
+
 # model ----
 
 # communicate ----
