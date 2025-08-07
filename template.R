@@ -8,12 +8,13 @@
 
 # packages
 pacman::p_load(
-  data.table,           # https://cran.r-project.org/web/packages/data.table/
-  httr,                 # https://cran.r-project.org/web/packages/httr/
-  janitor,              # https://cran.r-project.org/web/packages/janitor/
-  skimr,                # https://cran.r-project.org/web/packages/skimr/
-  tidytext,             # https://cran.r-project.org/web/packages/tidytext/
-  tidyverse             # https://cran.r-project.org/web/packages/tidyverse/
+  data.table, # https://cran.r-project.org/web/packages/data.table/
+  httr, # https://cran.r-project.org/web/packages/httr/
+  janitor, # https://cran.r-project.org/web/packages/janitor/
+  skimr, # https://cran.r-project.org/web/packages/skimr/
+  styler, # https://cran.r-project.org/web/packages/styler/
+  tidytext, # https://cran.r-project.org/web/packages/tidytext/
+  tidyverse # https://cran.r-project.org/web/packages/tidyverse/
 )
 
 # import
