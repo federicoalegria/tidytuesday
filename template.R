@@ -17,13 +17,6 @@ pacman::p_load(
 )
 
 # import
-## check size
-response <- HEAD('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-05-27/monsters.csv')
-bytes <- as.numeric(response$headers[["content-length"]])
-size_kb <- bytes / 1024
-size_mb <- size_kb / 1024
-cat(sprintf("df size: %.2f KB (%.2f MB)", size_kb, size_mb))
-## load data
 df <-
   fread(
     'link.csv'
