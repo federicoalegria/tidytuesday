@@ -9,7 +9,6 @@
 # packages
 pacman::p_load(
   data.table, # https://cran.r-project.org/web/packages/data.table/
-  httr, # https://cran.r-project.org/web/packages/httr/
   janitor, # https://cran.r-project.org/web/packages/janitor/
   skimr, # https://cran.r-project.org/web/packages/skimr/
   styler, # https://cran.r-project.org/web/packages/styler/
