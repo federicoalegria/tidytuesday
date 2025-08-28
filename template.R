@@ -4,7 +4,7 @@
 # setup ----
 
 # library path
-.libPaths(c("~/.R/x86_64-pc-linux-gnu-library/4.5", .libPaths()))
+.libPaths(c("~/.local/share/R/x86_64-pc-linux-gnu-library/4.5", .libPaths()))
 
 # packages
 pacman::p_load(
